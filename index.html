@@ -164,19 +164,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-my-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-数据处理流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/04/my-first-blog/">my first blog</a>
+      <a class="article-title" href="/2017/07/04/数据处理流程/">数据获取和产生机制</a>
     </h1>
   
 
         
-        <a href="/2017/07/04/my-first-blog/" class="archive-article-date">
+        <a href="/2017/07/04/数据处理流程/" class="archive-article-date">
   	<time datetime="2017-07-04T03:29:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
         
@@ -184,7 +184,44 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> 你好这是我的第一篇博客</p>
+        <h1 id="数据获取和产生机制"><a href="#数据获取和产生机制" class="headerlink" title="数据获取和产生机制"></a>数据获取和产生机制</h1><blockquote>
+<p>在本项目中，数据获取的来源主要是通过网络爬虫实现的，对应不同的学校门户我们制定了针对性的爬虫程序对展示在网页上的课程基本信息进行了采集。不同的课程信息，我们根据其来源不同进行了分类的存储。在本次采集中，我们抓取了全球排名前50的开放大学中的课程信息及网站内容较为丰富的21家大学，还包括了几家和各大学有着合作关系的大型在线学习网站的内容。抓取完成的数据经过简单的清洗后存入我们的非关系型数据库中。在数据处理分析过程中，借由spark的强大的分布式计算能力以及先进的分布式机器学习库对抓取的数据进行了更深层次的清洗，分割，整合，转换。对转换后的数据进行主题信息提取建模计算，文章相似度建模计算等分析计算</p>
+</blockquote>
+<p>–</p>
+<h3 id="一、数据获取"><a href="#一、数据获取" class="headerlink" title="一、数据获取"></a>一、数据获取</h3><p>数据获取的主体是网络爬虫的抓取。经过多种技术选择和比较，旨在提高抓取效率和稳定，我们选择了时下非常流行，功能完善的基于python的爬虫框架：Scrapy，它功能十分强大，在很多大型项目中都有使用。它的异步请求，多种内置的爬虫实现，完善的防BAN设置等等，都是我们在爬取过程中需要用到的实用功能。然后，在scrapy的基础上我们进行了内容抓取的爬虫开发。</p>
+<ol>
+<li>编写爬虫之前，我们会对不同学校的网站进行单独的结构分析，指定对应的爬取规则。</li>
+<li>对于复杂的网页和多页面同时爬取的需求，实现递归的爬虫实现</li>
+<li>设置多种防BAN策略，加入Download Delay延时，随机的请求UA，随机的代理IP池等</li>
+<li>数据的结构提取，对抓取来的文本数据，根据其内容将其分为： 课程名-课程描述-学院类别-课程地址 清晰的数据结构</li>
+<li>对课程描述的内容进行初步的清洗，对内容的重编码，去掉多余的网页标签内容，不常见的字符，重复较多的内容去除等等处理过程</li>
+<li>将初步清洗的数据存入非关系型数据库中</li>
+</ol>
+<p>具体过程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: 开始|[blank]</div><div class="line">e=&gt;end: 存入数据库</div><div class="line">op1=&gt;operation: 分析页面结构|past</div><div class="line">op2=&gt;operation: 制定抓取规则|current</div><div class="line">op5=&gt;operation: 数据清洗|current</div><div class="line">op1(right)-&gt;op2(right)-&gt;op5(right)-&gt;e</div></pre></td></tr></table></figure>
+<p>–</p>
+<h3 id="二、数据分析"><a href="#二、数据分析" class="headerlink" title="二、数据分析"></a>二、数据分析</h3><p>数据分析的主体是对数据的整体建模。对应既定的目标，我们选用的数据分析模型是：LDA（Latent Dirichlet Allocation主题模型）它能很好地将课程中关注的主题提取出来，是人工智能领域中比较优秀的聚类模型之一。</p>
+<blockquote>
+<ol>
+<li>主题模型是一种生成式模型，而且是通过主题来生成的。就是说，我们认为一篇文档的每个词都是通过以一定概率选择了某个主题，并从这个主题中以一定概率选择某个词语这样一个过程得到的。</li>
+<li>何谓“主题”呢？其含义就是诸如一篇文章、一段话、一个句子所表达的中心思想，只不过不同的是，从统计模型的角度来说，我们是用一个特定的词频分布来刻画主题的，不同主题的词相同，但是词频不同。一篇文档一般有多个主题，这样，我们就可以认为，一篇文档是有多个主题来生成的</li>
+</ol>
+</blockquote>
+<p>为了消除一些经常出现的无用词的干扰，在分析主题模型之前我们对数据进行另一种转换：TF-IDF（Term Frequency Inverse Document Frequency）转换，该方法同样也可以用来判断2篇文章的主题相似度，对于后期我们的文档去重有着很好的实用意义</p>
+<blockquote>
+<p>TF-IDF是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。</p>
+</blockquote>
+<p>数据分析的具体实现：</p>
+<ol>
+<li>spark载入存储在非关系型数据库中的数据，转化成spark用来分布式计算的弹性计算算子rdd。</li>
+<li>通过spark的Rdd的transform和action操作，对数据进行进一步的清洗过滤</li>
+<li>将文档分解为单词组成的List，使用spark的HashingTF将单词List进行特征向量转化</li>
+<li>构建单词到特征索引的一一对应的关系</li>
+<li>将特征向量进行IDF转换，去掉了词频对主题提取的影响</li>
+<li>将IDF转换得到的结果放入LDA模型中学习计算，完成文档的主题提取，可以更据给定的提取个数，得出对应个数的主题</li>
+</ol>
+<p>实现流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">e=&gt;end: 存入数据库</div><div class="line">op1=&gt;operation: 数据载入|past</div><div class="line">op2=&gt;operation: 文档分词|current</div><div class="line">op4=&gt;operation: 停用词过滤|current</div><div class="line">op5=&gt;operation: 特征向量转换|current</div><div class="line">op6=&gt;operation: 词组索引映射表|current</div><div class="line">op7=&gt;operation: IDF模型计算|current</div><div class="line">op8=&gt;operation: LDA模型计算|current</div><div class="line">op1-&gt;op2(right)-&gt;op4-&gt;op5(right)-&gt;op6()-&gt;op7(right)-&gt;op8</div></pre></td></tr></table></figure>
 
       
 
@@ -198,11 +235,23 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">first</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Hue</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">blog</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">spark</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LDA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">scrapy</a>
         		</li>
       		
 		</ul>
@@ -212,63 +261,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/04/my-first-blog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/04/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/04/hello-world/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:11:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/04/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/07/04/数据处理流程/">展开全文 >></a>
         </p>
       
 
@@ -375,11 +368,23 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">first</a>
+                <a href="javascript:void(0)" class="js-tag color4">Hue</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">blog</a>
+                <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">spark</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LDA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">scrapy</a>
               </li>
             
             <div class="clearfix"></div>
