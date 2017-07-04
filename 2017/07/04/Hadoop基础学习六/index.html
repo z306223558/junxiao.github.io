@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>tags | 一个技术渣的自我剖析</title>
+  <title>Hadoop基础学习六 | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://z306223558.github.io/tags/index.html">
+  <meta name="description" content="Hadoop——传智学习视频笔记(六)前言 大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架 Hadoop基础概念 hadoop的基本概念逻辑学习，历史发展等等  什么是Hadoop 1、他是apache的一套开元软件平台 2、hadoop利用服务器集群，对海量数据进行分布式处理 3、hadoop的核心组件： h">
+<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop基础学习六">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习六/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:updated_time" content="2017-07-04T07:12:22.000Z">
+<meta property="og:description" content="Hadoop——传智学习视频笔记(六)前言 大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架 Hadoop基础概念 hadoop的基本概念逻辑学习，历史发展等等  什么是Hadoop 1、他是apache的一套开元软件平台 2、hadoop利用服务器集群，对海量数据进行分布式处理 3、hadoop的核心组件： h">
+<meta property="og:updated_time" content="2017-07-04T07:39:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta name="twitter:title" content="Hadoop基础学习六">
+<meta name="twitter:description" content="Hadoop——传智学习视频笔记(六)前言 大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架 Hadoop基础概念 hadoop的基本概念逻辑学习，历史发展等等  什么是Hadoop 1、他是apache的一套开元软件平台 2、hadoop利用服务器集群，对海量数据进行分布式处理 3、hadoop的核心组件： h">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -163,27 +164,184 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Hadoop基础学习六" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      Hadoop基础学习六
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-07-04T07:11:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/04/Hadoop基础学习六/" class="archive-article-date">
+  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="Hadoop——传智学习视频笔记-六"><a href="#Hadoop——传智学习视频笔记-六" class="headerlink" title="Hadoop——传智学习视频笔记(六)"></a>Hadoop——传智学习视频笔记(六)</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<h4 id="大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架"><a href="#大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架" class="headerlink" title="大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架"></a>大数据学习第六天的视频，主要是hadoop基础，整体连续的hadoop的学习。hadoop是大数据框架，hadoop是大数据的入门框架</h4></blockquote>
+<h3 id="Hadoop基础概念"><a href="#Hadoop基础概念" class="headerlink" title="Hadoop基础概念"></a>Hadoop基础概念</h3><blockquote>
+<p>hadoop的基本概念逻辑学习，历史发展等等</p>
+</blockquote>
+<h4 id="什么是Hadoop"><a href="#什么是Hadoop" class="headerlink" title="什么是Hadoop"></a>什么是Hadoop</h4><ul>
+<li>1、他是apache的一套开元软件平台</li>
+<li>2、hadoop利用服务器集群，对海量数据进行分布式处理</li>
+<li>3、hadoop的核心组件：<ul>
+<li>hdfs 分布式文件系统</li>
+<li>YARN 运算资源调度系统</li>
+<li>MaoReduce 分布式运算变成框架，map程序模板和reduce模板，简化了程序开发，不用管执行过程中的错误处理，资源分配，网络通信等等细节问题。map——》产生中间结果——》reduce task 集合map task产生的中间结果</li>
+</ul>
+</li>
+<li>广义上来说hadoop其实是一个生态圈<ul>
+<li>1.web</li>
+<li>2.nutch</li>
+<li>3.hdfs</li>
+<li>4.分析图表工具</li>
+<li>5.mapreduce</li>
+<li>6.UNstructured Data （<code>Flume</code> <code>Sribe</code>）数据采集的组件，直接往hdfs中写入</li>
+<li>7.RDBMS structured Data （<code>hiho</code>，<code>sqoop</code>） 数据迁移工具</li>
+<li>8.HIVE High level InterFaces，JAQL</li>
+<li>9.暂时不清楚</li>
+<li>10.<code>oozie</code> askb Cascading Workflow</li>
+<li>11 <code>Hue</code>,<code>eclipse</code>  Monitor/Manage</li>
+<li>12.Support <code>Zookeeper</code></li>
+<li>13.人工智能 mahout</li>
+<li>14.HBase数据库</li>
+</ul>
+</li>
+</ul>
+<h4 id="hadoop的产生背景"><a href="#hadoop的产生背景" class="headerlink" title="hadoop的产生背景"></a>hadoop的产生背景</h4><blockquote>
+<p>hadoop起源于Nutch（他是一个爬虫）,Nutch+license就是一个搜索引擎。由于数据量太大，需要存储，那就需要用到分布式存储了。可拓展性受到了挑战，单机或者说少数服务器不能满足计算存储的需求后要引入分布式处理的概念，hadoop就出现了</p>
+</blockquote>
+<h4 id="hadoop的需求分析"><a href="#hadoop的需求分析" class="headerlink" title="hadoop的需求分析"></a>hadoop的需求分析</h4><blockquote>
+<p>以[www.cnzz.com]或者App中 来做分析，网站页面的分析<br>点击流日志数据挖掘系统，分析用户在页面的操作行为。在什么地方点击，用户的浏览记录等等，手机用户的行为后可以做一些趋向性分型，转化率等等内容</p>
+</blockquote>
+<p>一个案例：<br>本案里和典型的BI系统机器类似</p>
+<p>但是，本案例的前提是处理海量数据，因而，流程中各环节所使用的技术这个传统的完全不同：</p>
+<blockquote>
+<ol>
+<li>数据采集：地址开发采集程序，或使用开元框架FLUME</li>
+<li>数据预处理：定制开发mapreduce程序运行于hadoop集群</li>
+<li>数据仓库技术：基于hadoop之上的hive</li>
+<li>数据导出：基于hadoop智商的sqoop数据导入导出工具</li>
+<li>数据可视化：定制开发web程序活使用kettle等产品</li>
+<li>整个过程的流程调度：hadoop的生态圈中的oozie工具或其他类似的开源产品</li>
+</ol>
+</blockquote>
+<p>典型的一个推荐系统，图解。（后期补上）</p>
+<blockquote>
+<p><em>拓展：京东等大型网站系统的推荐系统，热门关注等等。。。。都是大数据需要解决的问题</em></p>
+</blockquote>
+<hr>
+<h4 id="hadoop的安装"><a href="#hadoop的安装" class="headerlink" title="hadoop的安装"></a>hadoop的安装</h4><p>安装hadoop必须有些提前准备：</p>
+<blockquote>
+<ul>
+<li>其中的JAVA_HOME环境需要安装准备好。</li>
+<li>免密登陆等问题需要处理好hadoop</li>
+<li>安装其实主要就是2大集群的安装。</li>
+</ul>
+</blockquote>
+<ul>
+<li>hdfs的集群<ul>
+<li>主要包括了<code>namenode</code>和<code>datanode</code>，<code>namenode</code>记录了文件的主要元数据，具体的存储的数据则是保存在了<code>datanode</code>上的，而且是做了分片备份的。</li>
+<li>hdfs 可以单独启动，以用来提供给spark集群单独调用。</li>
+<li><code>hdfs</code>的<code>namenode</code>节点的默认<code>client</code>端口是：9000</li>
+<li><code>hdfs</code>还有其他的与<code>datanode</code>进行<strong>RPC</strong>通信的端口。</li>
+</ul>
+</li>
+<li>yarn集群<ul>
+<li>yarn集群包含<code>resourceManager</code>和<code>nodeManagaer</code>，<code>resourceManager</code>推荐是单独在单机上安装</li>
+<li><code>nodeManager</code>是一定要去<code>dataNode</code>在同一个节点上启动的，不然就会产生移动数据计算的问题，与<code>hadoop</code>的核心思想是相悖的。</li>
+<li><code>nodeManagaer</code>具体执行<code>resourceManager</code>的任务</li>
+</ul>
+</li>
+</ul>
+<h4 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h4><ol>
+<li>下载hadoop包，解压执行（如果使用源码编译安装，需要下载maven，先配置maven，MAVEN需要配置配置文件，/etc/profile M2_HOME）</li>
+<li>配置免密登陆</li>
+<li>修改env.sh</li>
+<li>修改hdfs-site.xml</li>
+<li>修改yarn-core.xml</li>
+<li>sbin/start_all.sh</li>
+</ol>
+<p>修改配置文件的细节：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd etc/</div><div class="line">vim hadoop-env.sh</div></pre></td></tr></table></figure>
+<p>修改其中的 JAVA_HOME 变量的内容，指定到jdk的路径</p>
+<p>hadoop自己的运行时参数配置：</p>
+<ul>
+<li><p>core-site.xml<br>主要的修改 :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定hdfs集群的位置</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://localhost:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span>#这里其实指的是namenode提供给客户端访问的端口</div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定了每台机器上的进程运行的目录</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/hdpdate<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>hdfs-site.xml<br>主要的修改：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.blocksize<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定hdfs块的大小</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>64<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #配置了副本的数量，默认是3</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.secondary.http.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #配置secondary namenode的地址</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>localhost:50090<span class="tag">&lt;/<span class="name">value</span>&gt;</span> #默认端口为50090</div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>yarn-site.xml<br>主要的修改：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resoucemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定yarn的主要集群的机器，也是rescoucemanager启动的节点位置</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>localhost<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定mapreduce需要的服务 </div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>mapred-site.xml<br>主要的修改：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span> #指定maoreduce提交任务后的执行系统</div><div class="line">      <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>slaves (若不配置slaves，需要手动去每台机器上去启动datanode)<br>直接在hostslist里面加入所有datanode的ip或者hostname </p>
+</li>
+</ul>
+<p>修改配置文件完成后，就将hadoop整个文件夹拷贝到集群的其他机器上。</p>
+<p><strong>启动hadoop之前，需要先将hdfs格式化后交给hadoop使用</strong></p>
+<blockquote>
+<p>格式化之前可以先将 hadoop/bin  hadoop/sbin 加入PATH，方便执行</p>
+</blockquote>
+<p>格式化的命令是：<br><code>hadoop namenode -format</code></p>
+<p>启动namenode的命令可以使用：<br><code>sbin/hadoop-daemon.sh start namenode</code></p>
+<p>启动datanode的命令使用（<strong>必须在datanode机器上启动</strong>）：<br><code>sbin/hadoop-daemon.sh start datanode</code><br>由于每台机器都知道namenode在哪台机器，所以就能直接加入到namenode组成集群</p>
+<p>然后就是可以在各个datanode上启动了。。。。<br><strong>启动失败的log在对应的hadoop文件夹下的logs的*.log的文件下，查看错误信息就能解决问题，同样的可以应用于namenode启动失败的情况</strong></p>
+<blockquote>
+<p>这里启动的话就需要配置免密登陆了，不然使用<code>sbin\start-all.sh</code>，会平凡输入密码很慢<br>配置的方法：</p>
+<ol>
+<li>ssh-keygen</li>
+<li>ssh-copy-id hostname<br>这样就可以解决免密登陆的问题了</li>
+</ol>
+</blockquote>
+<p>停止hadoop的服务的话，使用stop-all.sh</p>
+<h4 id="Hadoop-shell的操作"><a href="#Hadoop-shell的操作" class="headerlink" title="Hadoop shell的操作"></a>Hadoop shell的操作</h4><h5 id="Hdfs的shell"><a href="#Hdfs的shell" class="headerlink" title="Hdfs的shell"></a>Hdfs的shell</h5><p>在namenode的50070端口可以查看hadoop的hdfs的web界面，如果要使用改web接口页面，需要在配置文件中配置http.port。界面只能查看，不能上传文件到hdfs中。</p>
+<ol>
+<li>ls 查看hdfs的文件列表 <code>hadoop fs -ls /</code></li>
+<li>put 上传文件到hdfs <code>hadoop fs -put ***.**</code></li>
+<li>cat txt 查看文件内容 <code>hadoop fs -cat ***.**</code></li>
+<li>moveFromLocal 从本地剪切到hdfs <code>hadoop fs -moveFromLocal a.txt /</code> 本地的文件被剪切</li>
+<li>moveToLocal 从hdfs剪切到本地 <code>hadoop fs -moveToLocal /a.txt a.txt</code></li>
+<li>appendToFile 本地文件追加到hdfs <code>hadoop fs -appendToFile a.txt /a.txt</code></li>
+<li>tail 显示一个文件的末尾 <code>hadoop fs -tail /a.txt</code></li>
+<li>chgrp chmod chown 修改文件的组属 权限 所属 与linux命令用法一致</li>
+<li>copyFromLocal copyToLocal 不同与move，本地会保留</li>
+<li>cp mv 从一个hdfs里面拷贝移动到另一个目录</li>
+<li>get getmerge 下载文件信息，getmerge是合并后下载</li>
+<li>rm rmdir 删除文件/文件夹</li>
+<li>df du 统计文件系统的大小 du是计算文件夹的大小</li>
+<li>count 统计一个指定目录下的文件夹数量</li>
+<li>setrep 设置文件的副本数量，通过这个命令可以动态修改副本的数量了（这里的设置只是记录在namenode中，集体还是得看datanode的数量）</li>
+</ol>
+<h4 id="Hadoop的javaAPI调用"><a href="#Hadoop的javaAPI调用" class="headerlink" title="Hadoop的javaAPI调用"></a>Hadoop的javaAPI调用</h4><blockquote>
+<ol>
+<li>使用idea搭建java开发环境，首先不适用maven时，需要先指定JAVASDK的位置，然后根据项目所需要的jar依赖包，在command+；键的 mouduels中选择dependcise里面加入所需的各种包</li>
+<li>使用maven项目的话，需要在新建时就直接新建maven的项目，然后在pom.xml中添加需要的jar包的名字，maven会自动读取依赖自动构建项目。</li>
+<li>maven修改国内源的问题，使用本地的一份 settings.xml 放入到 ~/.m2/中即可，而在idea中，maven的设置中要选择勾选forec reride。就覆盖加载，指定使用~/.m2/settings 即可。</li>
+</ol>
+</blockquote>
+<p>配置好项目环境后，开始正式使用java操作hdfsapi</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.fuman.hdfsTest;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FileSystem;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</div><div class="line"><span class="keyword">import</span> org.junit.Before;</div><div class="line"><span class="keyword">import</span> org.junit.Test;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.net.URI;</div><div class="line"><span class="keyword">import</span> java.net.URISyntaxException;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HDFSClietn</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> FileSystem fs = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="meta">@Before</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> IOException, URISyntaxException, InterruptedException </span>&#123;</div><div class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</div><div class="line">        conf.set(<span class="string">"fs.defaultFS"</span>, <span class="string">"hdfs://hadoop-namenode.com:9000"</span>);</div><div class="line">        fs = FileSystem.get(<span class="keyword">new</span> URI(<span class="string">"hdfs://hadoop-namenode.com:9000"</span>), conf, <span class="string">"root"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestPutFile</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            fs.copyFromLocalFile(<span class="keyword">new</span> Path(<span class="string">"/Users/xiaojun/Desktop/about.zip"</span>), <span class="keyword">new</span> Path(<span class="string">"/javaTest/about.zip"</span>));</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>主要要注意的地方是：</p>
+<ul>
+<li>configuration 配置文件的设置是 conf.set(“key”,”value”)，对应得是配置文件中的core-site.xml的对应配置</li>
+<li><code>fs = FileSystem.get(new URI(&quot;hdfs://hadoop-namenode.com:9000&quot;), conf, &quot;root&quot;);</code> 这里需要指定访问的用户名。不然是没办法操作文件的。</li>
+<li><code>ctrl+J</code> 是可以调出快速创建代码块的功能的</li>
+<li><code>alt+Enter</code> 可以直接调出快速指南，比如添加try catch。或者优化简洁语法       </li>
+</ul>
+
       
 
       
@@ -212,6 +370,25 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -262,7 +439,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习六/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,9 +451,36 @@ var _hmt = _hmt || [];
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/2017/07/04/Hadoop基础学习八/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop基础学习八
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/04/数据处理流程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据获取和产生机制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
 
+
+
+  
+  
+  
+
+  
+
+  
 
 
           </div>
@@ -299,7 +503,7 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

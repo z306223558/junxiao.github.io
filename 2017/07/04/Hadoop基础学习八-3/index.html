@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>tags | 一个技术渣的自我剖析</title>
+  <title>Hadoop基础学习八-3 | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://z306223558.github.io/tags/index.html">
+  <meta name="description" content="Hadoop第八天第三节wordcount程序介绍Mapper的输入数据是KV对的形式Mapper的输出也是KV对的形式 map（）是对每一个KV对调用reduce是对k相同的kv对使用 wordcount的程序流程mr appmaster MA 根据数据的分片数据的多少决定启动多少个map task获取待处理的数据的信息，然后根绝参数的配置，形成一个任务的分配规则 客户端的操作： submit(">
+<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop基础学习八-3">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习八-3/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:updated_time" content="2017-07-04T07:12:22.000Z">
+<meta property="og:description" content="Hadoop第八天第三节wordcount程序介绍Mapper的输入数据是KV对的形式Mapper的输出也是KV对的形式 map（）是对每一个KV对调用reduce是对k相同的kv对使用 wordcount的程序流程mr appmaster MA 根据数据的分片数据的多少决定启动多少个map task获取待处理的数据的信息，然后根绝参数的配置，形成一个任务的分配规则 客户端的操作： submit(">
+<meta property="og:updated_time" content="2017-07-04T07:44:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta name="twitter:title" content="Hadoop基础学习八-3">
+<meta name="twitter:description" content="Hadoop第八天第三节wordcount程序介绍Mapper的输入数据是KV对的形式Mapper的输出也是KV对的形式 map（）是对每一个KV对调用reduce是对k相同的kv对使用 wordcount的程序流程mr appmaster MA 根据数据的分片数据的多少决定启动多少个map task获取待处理的数据的信息，然后根绝参数的配置，形成一个任务的分配规则 客户端的操作： submit(">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -163,27 +164,36 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Hadoop基础学习八-3" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      Hadoop基础学习八-3
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-07-04T07:11:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/04/Hadoop基础学习八-3/" class="archive-article-date">
+  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="Hadoop第八天第三节"><a href="#Hadoop第八天第三节" class="headerlink" title="Hadoop第八天第三节"></a>Hadoop第八天第三节</h1><h3 id="wordcount程序介绍"><a href="#wordcount程序介绍" class="headerlink" title="wordcount程序介绍"></a>wordcount程序介绍</h3><p>Mapper的输入数据是KV对的形式<br>Mapper的输出也是KV对的形式</p>
+<p>map（）是对每一个KV对调用<br>reduce是对k相同的kv对使用</p>
+<h3 id="wordcount的程序流程"><a href="#wordcount的程序流程" class="headerlink" title="wordcount的程序流程"></a>wordcount的程序流程</h3><p>mr appmaster</p>
+<p>MA 根据数据的分片数据的多少决定启动多少个map task<br>获取待处理的数据的信息，然后根绝参数的配置，形成一个任务的分配规则</p>
+<p>客户端的操作： submit() -》将数据参数提交 -》 YARN -》通过RsourceManager来分配资源给maptask</p>
+<p>NodeManager去启动对应数量的maptask</p>
+<p>map读取文件<br>inputFormat 是maptask中的读取文件的真真工作者<br>outputCollector 输出数据收集器 分区和排序的<br>inputFormat 的输入丢个Mapper（）方法，经过一系列的数据处理后</p>
+<p>outputCollector<br>会将数据分区，多个map的对应的分区给到指定的reducer去处理，这样可以得出，reduce的数量一般和mao的数量基本一致 </p>
+<p>在map和reduce中间过程有一个shuffle过程，shuffle就是将文件相同的基本分类到一起<br>都是有appmaster管理的</p>
+
       
 
       
@@ -212,6 +222,25 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -262,7 +291,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习八-3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,9 +303,36 @@ var _hmt = _hmt || [];
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/2017/07/04/Hadoop基础学习九/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop基础学习九
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/04/Hadoop基础学习八/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop基础学习八</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
 
+
+
+  
+  
+  
+
+  
+
+  
 
 
           </div>
@@ -299,7 +355,7 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

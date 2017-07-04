@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>tags | 一个技术渣的自我剖析</title>
+  <title>Hadoop基础学习七 | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://z306223558.github.io/tags/index.html">
+  <meta name="description" content="大数据学习（七）启动hadoop的相关错误统计 连接resourcemanager,重试很多次还是不成功  123connecting to resourcemanager...retry to ...retry to ...  错误原因是resourcemanger启动失败，就是yarn集群启动失败。错误原因有可能是 服务器时间不匹配的问题  关于hadoop namenode -format错">
+<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop基础学习七">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习七/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:updated_time" content="2017-07-04T07:12:22.000Z">
+<meta property="og:description" content="大数据学习（七）启动hadoop的相关错误统计 连接resourcemanager,重试很多次还是不成功  123connecting to resourcemanager...retry to ...retry to ...  错误原因是resourcemanger启动失败，就是yarn集群启动失败。错误原因有可能是 服务器时间不匹配的问题  关于hadoop namenode -format错">
+<meta property="og:updated_time" content="2017-07-04T07:40:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta name="twitter:title" content="Hadoop基础学习七">
+<meta name="twitter:description" content="大数据学习（七）启动hadoop的相关错误统计 连接resourcemanager,重试很多次还是不成功  123connecting to resourcemanager...retry to ...retry to ...  错误原因是resourcemanger启动失败，就是yarn集群启动失败。错误原因有可能是 服务器时间不匹配的问题  关于hadoop namenode -format错">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -163,27 +164,145 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Hadoop基础学习七" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      Hadoop基础学习七
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-07-04T07:11:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/04/Hadoop基础学习七/" class="archive-article-date">
+  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="大数据学习（七）"><a href="#大数据学习（七）" class="headerlink" title="大数据学习（七）"></a>大数据学习（七）</h1><h4 id="启动hadoop的相关错误统计"><a href="#启动hadoop的相关错误统计" class="headerlink" title="启动hadoop的相关错误统计"></a>启动hadoop的相关错误统计</h4><ol>
+<li>连接resourcemanager,重试很多次还是不成功</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">connecting to resourcemanager...</div><div class="line">retry to ...</div><div class="line">retry to ...</div></pre></td></tr></table></figure>
+<p> <strong>错误原因是resourcemanger启动失败，就是yarn集群启动失败。错误原因有可能是 服务器时间不匹配的问题</strong></p>
+<ol>
+<li><p>关于hadoop namenode -format错误<br><strong>有可能是权限问题，可以查看log文件找到原因</strong><br>该命令只是初始化了namenode的工作目录，而datanode的工作目录实在datanode启动时新建的</p>
+</li>
+<li><p>namenode可以启动，但是datanode启动失败的。<br><strong>错误原因：1.可能是免密登陆配置问题 2.可能是core-site.xml的修改没有同步到datanode中，要时刻保持namenode和datanode的配置文件是一致的，不能有不同。</strong></p>
+</li>
+<li><p>datanode不被namenode识别的问题<br> namenode在format初始化的时候会形成两个标  识：</p>
+<ul>
+<li>blockPoolId</li>
+<li>clusterId<br>新的datanode加入时，会获取这两个标识作为自己的 工作目录中的标识，一旦namenode重新format后， namenode的身份标识已经改变，而datanode如果依然持有原来的Id，这不能识别namenode了，解决办法是删除datanode的工作目录</li>
+</ul>
+</li>
+<li><p>datanode下线后多久看到效果<br>datanode不是一下线就立马被nodenode感知到的</p>
+</li>
+</ol>
+<p>6.如果在代码中设置了配置项，那么服务器执行会使用代码中的配置，而不使用配置文件的</p>
+<hr>
+<h3 id="Hdfs写数据的流程"><a href="#Hdfs写数据的流程" class="headerlink" title="Hdfs写数据的流程"></a>Hdfs写数据的流程</h3><ul>
+<li>第一步：client 直接rpc连接到namenode的进程。会指定上传的文件 指定的存放路劲（nett）</li>
+<li>第二步：namenode把数据存在 元数据 中，然后根据请求，去查询元数据，检查路径是否存在，文件是否存在，若通过则返回 可以上传</li>
+<li><p>第三步：client继续请求namenode上传第一个block，需要namenode返回上传的具体datanode位置。namenode接收到请求，就会查看datanode列表，根据一定的规则，返回合适的datanode的位置。返回规则：空间大小和距离（网络跳转级数），会在本机-》本局域网-》本机架-》数据中心 （确保数据的副本的安全），返回的副本数是有客户端决定的</p>
+<blockquote>
+<ol>
+<li>第一个副本考虑client的同机架</li>
+<li>第二个副本在考虑同一个机房的不同机架的datanode</li>
+<li>不同的数据中心的一台datanode<br>需要配置机架感知策略</li>
+</ol>
+</blockquote>
+</li>
+<li><p>第四步：先要建立一个scoket连接通道，对于三台机器，我们的策略是先和第一个DN建立一个通道，而DN则开启一个本地文件流，将SC中的数据流写入到本地文件流。传输完成后，并不再去建立第二个连接，而是由DN1-》DN2-》DN3，是由DN向DN传递副本的，同样再上传数据之前是先建立连接的，然后一层一层的向上层应答。保证可靠传输</p>
+</li>
+<li>第五步：通道建立成功后，则是开始真真的数据传输，client向DN1写数据也不是一次性直接写入一个block的，而是一个个64k大小的数据包packet，DN1接受后会对数据进行校验。而在读写过程中，DN是有一个ByteBUf缓冲池的，数据是先写入缓冲池的，在写入缓冲的同时也写入本地文件系统的，接受成功后也要向上一层确认。而客户端只要上传成功一次就认为数据上传成功，如果失败会重新请求ND，让其分配新的DNs</li>
+<li>第六步：如果一个block已经传完，还有剩下的文件，则不是直接继续在DN1上上传，而是再去请求ND，分配另外的DNs，然后在进行4，5步，直到一个文件被成功上传完成。</li>
+</ul>
+<blockquote>
+<p>文件的校验：packet校验不是以packet为单位来校验的，而是使用512Byte的chunk来校验的。</p>
+</blockquote>
+<p><strong>回头看Zookeeper分布式锁</strong></p>
+<h3 id="Hdfs数据读取流程"><a href="#Hdfs数据读取流程" class="headerlink" title="Hdfs数据读取流程"></a>Hdfs数据读取流程</h3><ul>
+<li>第一步：首先，client发出rpc请求到ND，请求中包含了请求文件的路径地址。ND受到rpc请求，检索元数据，查看文件是否存在，存在则，返回该数据的所有block块的信息，包括每块在具体的DN的地址，block的顺序，然后将数据返回给client，其实就是文件的元数据（hadoop之前的数据通信是使用 profbuf）</li>
+<li>第二步：根据ND返回的元数据，与DN1建立连接，DN1收到连接建立请求，确认和client的连接，生成数据通道（nio socket），客户端开启一个fileStream,socket是outputStream，将scoket中的数据写入到文件流中。</li>
+<li>第三步：DN1的数据传输完成后，client就继续去寻找下一个DN，同样的去建立连接，写入文件流。。。。</li>
+<li>第四步：文件现在合并完成</li>
+</ul>
+<p>数据读取流程和写入流程的不同之处是，写入是client是只和DN1通信，其他文件的copy是有DN1和其他DNs通信的，而读取是要和多个DN通信append数据到文件流的。</p>
+<h3 id="NameNode记录元数据问题"><a href="#NameNode记录元数据问题" class="headerlink" title="NameNode记录元数据问题"></a>NameNode记录元数据问题</h3><p>元数据是存放在内存中的<br>ND的工作目录的文件夹下有个文件 fsimage 就是元数据的内存镜像，是内存序列化后的结果，如果是事实dump到 fsimage 的话，数据量大后是绝对不可以执行的。如果是定时执行的话，会有一段时间的元数据的丢失。也不可行。所有ND会有自己的元数据策略</p>
+<p>新的角色： secondary namenode 负责namenode的fsimage 的管理</p>
+<p>当有元数据更新的时候：</p>
+<ol>
+<li>先在内存更新</li>
+<li>然后记录本次操作的日志文件，将元数据的更新操作追加到日志。操作日志是不会真真修改元数据的,正在使用写的edits 名字中带有 _inprogress</li>
+<li>然后在根据日志，有元数据生成过程去修改 fsimage</li>
+</ol>
+<p>如果数据量大，并且ND down掉了，重启的时候，要加载edits和fsimage加载到内存会很慢很慢，如果这样，ND根本忙不过来<br>这时有2步操作：</p>
+<ul>
+<li>第一：edits需要定时的去和fsiamge进行合并，减少edits的数量，就能大幅度减少启动时间</li>
+<li>第二: 启动过程中，不能有ND来完成这个合并的工作，不然ND无法有空间提供给client服务。所有是有SND来进行具体操作的</li>
+<li>第三：有一个checkpoint 来触发 edits的合并操作。是有SND一直和ND请求，是否需要将edits合并</li>
+</ul>
+<p><strong>SND合并edits的策略</strong></p>
+<p>由于正在写的edits我们是不能操作的（但是在SND向ND checkpoint时，会立即让ND滚动一次edits_in_progress,这样就能同时更新到最新的edits），但是hadoop得edits是滚动生成的，SND会把在inprogres之前的edits，下载到SND，同样拷贝的还有fsimage（只有第一次的时候是需要下载fsimage的，因为后面的fsimage是在SND上有的），然后在SND的机器上记录重新操作，然后加载到内存，在将操作完成的元数据fsimage，再将新的fsimage上传到ND中，请求ND将Nd的fsimage覆盖，并且删除掉操作过后的edits</p>
+<blockquote>
+<p>每一个block的元数据平均是150Byte的大小，所以存同样体积的大小文件，显然大文件占的元数据少</p>
+</blockquote>
+<p>思考的问题</p>
+<ol>
+<li>namenode如果宕机，hdfs是否能够提供正常的功能（SND只是为namenode做备份的，不提供client的服务）</li>
+<li>如果namenode的硬盘损坏，元数据能否恢复？如何恢复？（能的，通过SND，只能恢复绝大部分。直接把SND的工作目录拷贝到ND的工作目录即可）</li>
+<li>我们在配置namenode的工作目录参数时，要注意什么？ （namenode的工作目录应该配置在多个硬盘上面，这样一块硬盘出问题还能通过另一块恢复。是最好的解决办法，可能会带来的问题是，namenode写入元数据要多写入一块硬盘，具体是陪在 hadoop.namenode.name.dir 写入多个目录，以 , 隔开）</li>
+<li>如果datanode配置多块，可以实现磁盘写入并行，提高效率也提高了容量</li>
+</ol>
+<h4 id="元数据的其他属性"><a href="#元数据的其他属性" class="headerlink" title="元数据的其他属性"></a>元数据的其他属性</h4><ul>
+<li>namespaceId 是指定ND的ID，用来区别ID</li>
+<li>clusterId 这是集群ID</li>
+</ul>
+<p>以上2个参数在 format ND后会改变，如果不指定会随机生成</p>
+<ul>
+<li>cTime 存储时间的创建时间，估计是用来表示ND的工作时长</li>
+<li>layoutVersion hadoop升级会修改该值，表示永久性数据结构的版本信息</li>
+<li>在ND的数据目录，有一个 seen_txid 每重启一次都会是其值加1，或者format？，每次重启ND时，ND会根据该值知道该加载那些edits加载到内存</li>
+<li>current 目录下在format的同事也会生成fsimage和edits文件以及其对应的MD5校验文件</li>
+</ul>
+<h3 id="DateNode的详解"><a href="#DateNode的详解" class="headerlink" title="DateNode的详解"></a>DateNode的详解</h3><ol>
+<li>DateNode的主要职责是存储管理用户的文件块数据，定期向ND汇报所持有的block的信息</li>
+<li><p>DN的掉线判断时的时限参数，DN宕机时ND不会立马判定DN死亡，hdfs的默认超时时长是10分钟+30秒，如果定义timeout，时长公式是：</p>
+<p><code>timeout = 2*heartbeat.recheck.interval + 10 dfs.heartbeat.interval</code><br>需要注意的是：hdfs-site.xml文件中的heartbeat.recheck.interval 单位是毫秒，dfs.heartbeat.interval单位为秒</p>
+</li>
+</ol>
+<h3 id="实战java代码"><a href="#实战java代码" class="headerlink" title="实战java代码"></a>实战java代码</h3><ul>
+<li><p>创建文件夹，fs.mkdirs()</p>
+<blockquote>
+<p>此处出了一个问题，由于前一次直接关机，hadoop这次开机启动后自动进入了safemode 即安全模式，需要先退出安全模式：执行命令：<code>hadoop dfsadmin -safemode leave</code></p>
+</blockquote>
+</li>
+<li><p>删除文件测试 fs.delete(Path,boolen)，返回只是一个boolen值</p>
+</li>
+<li><p>测试文件的遍历展示：fs.listFiles(Path,boolen)</p>
+<blockquote>
+<p>该函数的返回是递归返回的，会遍历所有的文件。返回值是一个iterateor，不返回list的原因是因为listFiles返回的文件数可能很多，如果返回list，客户端的内存会被撑爆，而iterator是一个结构，不会有内存泄漏的危险</p>
+</blockquote>
+</li>
+<li><p>测试文件展示： fs.listStatus（Path） 会返回一个list，但是不是递归显示的,只会返回当前文件夹下的内容</p>
+</li>
+<li><p>为了实现DN中的mapred的任务执行，必须提供一种可以读取指定长度文件的方法，即流式读取</p>
+</li>
+</ul>
+<h3 id="Hadoop的RPC框架"><a href="#Hadoop的RPC框架" class="headerlink" title="Hadoop的RPC框架"></a>Hadoop的RPC框架</h3><p>为了隐藏ND和DN和client的网络请求实现，hadoop封装实现了自己的一套RPC框架<br>HDFS的DistrubitDFS的生成过程，会先在CACHE中get，然后map中get，然后是createFileSystem，然后就是fs.initialital然后是，DFSClient,然后是RPC.getProxy,指定probuff。</p>
+<h3 id="制作一个数据采集的Shell脚本"><a href="#制作一个数据采集的Shell脚本" class="headerlink" title="制作一个数据采集的Shell脚本"></a>制作一个数据采集的Shell脚本</h3><p>几个注意点：</p>
+<ol>
+<li>先设置工作目录，为了脚本的健全性，我们应该自己export好 JAVA_HOME 等变量信息。</li>
+<li>文件的名字已经需要动态修改，不然在文件集合到一起的时候不同的机器的同名文件可能会被覆盖</li>
+<li>文件上传到HDFS上时不能直接在log文件夹中上传，应该建立一个中转目录，在中转目录中上传</li>
+<li>上传时我们将文件名统一写到一个willdoing文件中，遍历文件中的文件名，然后动态的变换文件的状态到名字上，避免重复上传。    </li>
+</ol>
+
       
 
       
@@ -212,6 +331,25 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -262,7 +400,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习七/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,9 +412,27 @@ var _hmt = _hmt || [];
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/04/Hadoop基础学习九/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop基础学习九</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
 
+
+
+  
+  
+  
+
+  
+
+  
 
 
           </div>
@@ -299,7 +455,7 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

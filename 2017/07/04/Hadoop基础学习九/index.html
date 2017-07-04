@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>tags | 一个技术渣的自我剖析</title>
+  <title>Hadoop基础学习九 | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://z306223558.github.io/tags/index.html">
+  <meta name="description" content="Hadoop第九天第一节回顾知识 mapred的运行过程分为2个阶段，第一个叫map task，第二个叫reduce task由appmaster来协调由yarn提供启动运行  到底map会启动几个，reduce启动几个？map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块切片的大小可以调整，maxsize minsizemap启动完成后完全并行操">
+<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop基础学习九">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习九/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:updated_time" content="2017-07-04T07:12:22.000Z">
+<meta property="og:description" content="Hadoop第九天第一节回顾知识 mapred的运行过程分为2个阶段，第一个叫map task，第二个叫reduce task由appmaster来协调由yarn提供启动运行  到底map会启动几个，reduce启动几个？map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块切片的大小可以调整，maxsize minsizemap启动完成后完全并行操">
+<meta property="og:updated_time" content="2017-07-04T07:45:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta name="twitter:title" content="Hadoop基础学习九">
+<meta name="twitter:description" content="Hadoop第九天第一节回顾知识 mapred的运行过程分为2个阶段，第一个叫map task，第二个叫reduce task由appmaster来协调由yarn提供启动运行  到底map会启动几个，reduce启动几个？map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块切片的大小可以调整，maxsize minsizemap启动完成后完全并行操">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -163,27 +164,33 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Hadoop基础学习九" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      Hadoop基础学习九
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-07-04T07:11:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/04/Hadoop基础学习九/" class="archive-article-date">
+  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="Hadoop第九天第一节"><a href="#Hadoop第九天第一节" class="headerlink" title="Hadoop第九天第一节"></a>Hadoop第九天第一节</h1><h3 id="回顾知识"><a href="#回顾知识" class="headerlink" title="回顾知识"></a>回顾知识</h3><ol>
+<li>mapred的运行过程<br>分为2个阶段，第一个叫map task，第二个叫reduce task<br>由appmaster来协调<br>由yarn提供启动运行</li>
+</ol>
+<p>到底map会启动几个，reduce启动几个？<br>map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块<br>切片的大小可以调整，maxsize minsize<br>map启动完成后完全并行操作，互不相干</p>
+<p>reduce的数量<br>reduce是由map产生的中间结果来作为输入的<br>所以相同的单词会汇聚到一个相同的reduce 进程<br>map把数据生成后会对数据做分区<br>通过getPartiton插件方法，传入reduce的数量做hash除法</p>
+<p>reduce的输出可以更改名字</p>
+
       
 
       
@@ -212,6 +219,25 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -262,7 +288,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习九/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,9 +300,36 @@ var _hmt = _hmt || [];
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/2017/07/04/Hadoop基础学习七/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop基础学习七
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/04/Hadoop基础学习八-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop基础学习八-3</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
 
+
+
+  
+  
+  
+
+  
+
+  
 
 
           </div>
@@ -299,7 +352,7 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
