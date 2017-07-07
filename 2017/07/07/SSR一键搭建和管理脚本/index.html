@@ -6,19 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>Hadoop基础学习八 | 一个技术渣的自我剖析</title>
+  <title>一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
-<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+  <meta name="description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hadoop基础学习八">
-<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习八/index.html">
+<meta property="og:title" content="一个技术渣的自我剖析">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/07/SSR一键搭建和管理脚本/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
-<meta property="og:updated_time" content="2017-07-04T07:42:23.000Z">
+<meta property="og:description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
+<meta property="og:updated_time" content="2017-07-07T03:15:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hadoop基础学习八">
-<meta name="twitter:description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
+<meta name="twitter:title" content="一个技术渣的自我剖析">
+<meta name="twitter:description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -164,43 +163,34 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Hadoop基础学习八" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-SSR一键搭建和管理脚本" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Hadoop基础学习八
-    </h1>
-  
-
-        
-        <a href="/2017/07/04/Hadoop基础学习八/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="大数据学习（八）"><a href="#大数据学习（八）" class="headerlink" title="大数据学习（八）"></a>大数据学习（八）</h1><h4 id="上一天复习"><a href="#上一天复习" class="headerlink" title="上一天复习"></a>上一天复习</h4><p>主要是客户端向hdfs上传文件的流程</p>
-<ol>
-<li>client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表</li>
-<li>客户端与第一个DN通信，建立通道，然后上传指定块</li>
-<li>DN与其他ND建立通道，将文件副本拷贝过去</li>
-<li>通知NN成功存，记录本次操作的日志</li>
-</ol>
-<p>然后是 客户端的api，流方式访问<br>流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程序相对于hdfs来说就是一个应用</p>
-<p>绝大部分的网站数据日志分析的需求<br>使用flum来采集或者自行写脚本采集，分析用户web行为，会是很大的数据，基于这些数据我们能够分析用户额页面行为，优化页面结构，分析用户喜好，智能推荐等等 </p>
-<h3 id="MapReduce基础"><a href="#MapReduce基础" class="headerlink" title="MapReduce基础"></a>MapReduce基础</h3><p>MapReduce是一个分布式运算程序的编程框架</p>
-<p>MapReduce分为2个阶段：</p>
-<ol>
-<li>第一个阶段的task并发实例各司其职各自为政互不相干，完全的并行</li>
-<li>第二个阶段的task并发实例互不相干，但是他们的数据依赖于上一个阶段的task并发的实例输出</li>
-<li>业务复杂就需要使用多个MAPREDUCE来串行执行</li>
-</ol>
-<p>每一个Mapreduce 都有一个主要程序负责调度</p>
+        <h1 id="新的SSR多用户管理脚本"><a href="#新的SSR多用户管理脚本" class="headerlink" title="新的SSR多用户管理脚本"></a>新的SSR多用户管理脚本</h1><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><blockquote>
+<p>一键开启、关闭SSR服务<br>添加、删除、修改用户端口和密码<br>自由限制用户端口流量使用<br>自动修改防火墙规则<br>自助修改SSR加密方式、协议、混淆等参数<br>自动统计，方便查询每个用户端口的流量使用情况<br>自动安装Libsodium库以支持Chacha20等加密方式<br>每月自动清空用户流量<br>一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）</p>
+</blockquote>
+<h3 id="安装脚本"><a href="#安装脚本" class="headerlink" title="安装脚本"></a>安装脚本</h3><p>（请使用 Xshell 连接以取得最好的中文编码支持）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget –N —no–check–certificate https://raw.githubusercontent.com/FunctionClub/SSR-Bash-Python/master/install.sh &amp;&amp; bash install.sh</div></pre></td></tr></table></figure>
+<p>安装完成后输入 ssr 回车即可使用</p>
+<h3 id="卸载脚本"><a href="#卸载脚本" class="headerlink" title="卸载脚本"></a>卸载脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget –N —no–check–certificate https://raw.githubusercontent.com/FunctionClub/SSR-Bash-Python/master/uninstall.sh &amp;&amp; bash uninstall.sh</div></pre></td></tr></table></figure>
+<h3 id="系统支持"><a href="#系统支持" class="headerlink" title="系统支持"></a>系统支持</h3><p>Ubuntu 14<br>Ubuntu 16<br>CentOS 6<br>CentOS 7<br>Debian 7<br>Debian 8（推荐）<br>与上一版改进</p>
+<p>支持每个端口单独自定义加密方式，混淆，协议。<br>暂时支持了部分兼容协议。<br>支持CentOS 系列系统。<br>每月自动清空流量使用记录。<br>分别记录上传流量和下载流量。<br>动态管理用户，每一次更改用户不会影响原有用户端口。<br>恢复ShadowsocksR所支持的兼容模式。<br>增加返回上一级菜单功能。<br>支持为每一个端口添加不同协议参数与混淆参数。</p>
+<p>–</p>
+<h3 id="已知的问题"><a href="#已知的问题" class="headerlink" title="已知的问题"></a>已知的问题</h3><p>未添加开机自动启动<br>最后一名用户无法删除<br>部分系统上IP地址识别错误，导致SSR链接生成有问题，手动修改即可。</p>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><p>问1：是否需要自己先安装SSR服务端？</p>
+<p>答1：不需要，脚本默认自带了安装SSR的部分。请使用纯净的系统进行安装。</p>
+<p>问2：是否能和Oneinstack一起安装？</p>
+<p>答2：原则上是可以的，但是并不建议放在生产环境中使用，建议单独使用一台VPS来扶墙。</p>
+<p>问3：为什么无法开启兼容模式？</p>
+<p>答3：因为SSR服务端只支持部分协议的兼容设置，所以并非所有的协议插件都能兼容原版。具体列表参考 SSR协议插件稳文档</p>
+<p>问4：脚本安装好连接上没有网络？</p>
+<p>答4：请确认好您已经正确填写了加密方式、协议和混淆，并且使用最新的SSR客户端而不是SS客户端。</p>
+<p>问5：脚本还是无法使用！</p>
+<p>答5：如果可以输入 ssr 命令打开功能菜单，请选择 1 服务管理 再选择 4 查看日志。发送给我详细截图以解决问题。</p>
+<p>问6：脚本是否支持 UDP 转发？</p>
+<p>答6：默认是开启了 UDP转发的，如果无法使用，请检查SSR官方文档修改本地配置，SSR服务端默认安装在 /usr/local/shadowsocksr</p>
 
       
 
@@ -230,25 +220,6 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -299,7 +270,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习八/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/07/SSR一键搭建和管理脚本/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -313,18 +284,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2017/07/04/Hadoop基础学习九/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/07/mysql重置密码步骤/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Hadoop基础学习九
+          (no title)
         
       </div>
     </a>
   
   
-    <a href="/2017/07/04/Hadoop基础学习六/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hadoop基础学习六</div>
+    <a href="/2017/07/04/Hadoop基础学习七/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hadoop基础学习七</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -6,19 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>Hadoop基础学习八 | 一个技术渣的自我剖析</title>
+  <title>一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
-<meta name="keywords" content="Hadoop,大数据基础,Hadoop生态圈">
+  <meta name="description" content="忘记Mysql密码重设密码方法具体步骤：第一步：停止mysql服务1service mysql stop 第二步: 启动mysqld_safe启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。 1mysqld_safe --skip-grant-tabl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hadoop基础学习八">
-<meta property="og:url" content="https://z306223558.github.io/2017/07/04/Hadoop基础学习八/index.html">
+<meta property="og:title" content="一个技术渣的自我剖析">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/07/mysql重置密码步骤/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
-<meta property="og:updated_time" content="2017-07-04T07:42:23.000Z">
+<meta property="og:description" content="忘记Mysql密码重设密码方法具体步骤：第一步：停止mysql服务1service mysql stop 第二步: 启动mysqld_safe启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。 1mysqld_safe --skip-grant-tabl">
+<meta property="og:updated_time" content="2017-07-07T03:15:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hadoop基础学习八">
-<meta name="twitter:description" content="大数据学习（八）上一天复习主要是客户端向hdfs上传文件的流程  client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表 客户端与第一个DN通信，建立通道，然后上传指定块 DN与其他ND建立通道，将文件副本拷贝过去 通知NN成功存，记录本次操作的日志  然后是 客户端的api，流方式访问流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程">
+<meta name="twitter:title" content="一个技术渣的自我剖析">
+<meta name="twitter:description" content="忘记Mysql密码重设密码方法具体步骤：第一步：停止mysql服务1service mysql stop 第二步: 启动mysqld_safe启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。 1mysqld_safe --skip-grant-tabl">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -164,43 +163,21 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Hadoop基础学习八" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-mysql重置密码步骤" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Hadoop基础学习八
-    </h1>
-  
-
-        
-        <a href="/2017/07/04/Hadoop基础学习八/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="大数据学习（八）"><a href="#大数据学习（八）" class="headerlink" title="大数据学习（八）"></a>大数据学习（八）</h1><h4 id="上一天复习"><a href="#上一天复习" class="headerlink" title="上一天复习"></a>上一天复习</h4><p>主要是客户端向hdfs上传文件的流程</p>
-<ol>
-<li>client先和NN通信，获取文件纯在状态，是否可存，分配的DN的列表</li>
-<li>客户端与第一个DN通信，建立通道，然后上传指定块</li>
-<li>DN与其他ND建立通道，将文件副本拷贝过去</li>
-<li>通知NN成功存，记录本次操作的日志</li>
-</ol>
-<p>然后是 客户端的api，流方式访问<br>流访问的可行，实现了高级程序的随机读写的可能性，这样就能让mapred可以成功的分片执行，mr程序相对于hdfs来说就是一个应用</p>
-<p>绝大部分的网站数据日志分析的需求<br>使用flum来采集或者自行写脚本采集，分析用户web行为，会是很大的数据，基于这些数据我们能够分析用户额页面行为，优化页面结构，分析用户喜好，智能推荐等等 </p>
-<h3 id="MapReduce基础"><a href="#MapReduce基础" class="headerlink" title="MapReduce基础"></a>MapReduce基础</h3><p>MapReduce是一个分布式运算程序的编程框架</p>
-<p>MapReduce分为2个阶段：</p>
-<ol>
-<li>第一个阶段的task并发实例各司其职各自为政互不相干，完全的并行</li>
-<li>第二个阶段的task并发实例互不相干，但是他们的数据依赖于上一个阶段的task并发的实例输出</li>
-<li>业务复杂就需要使用多个MAPREDUCE来串行执行</li>
-</ol>
-<p>每一个Mapreduce 都有一个主要程序负责调度</p>
+        <h1 id="忘记Mysql密码重设密码方法"><a href="#忘记Mysql密码重设密码方法" class="headerlink" title="忘记Mysql密码重设密码方法"></a>忘记Mysql密码重设密码方法</h1><h3 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h3><h5 id="第一步：停止mysql服务"><a href="#第一步：停止mysql服务" class="headerlink" title="第一步：停止mysql服务"></a>第一步：停止mysql服务</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql stop</div></pre></td></tr></table></figure>
+<h5 id="第二步-启动mysqld-safe"><a href="#第二步-启动mysqld-safe" class="headerlink" title="第二步: 启动mysqld_safe"></a>第二步: 启动mysqld_safe</h5><p>启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqld_safe --skip-grant-tables &amp;</div></pre></td></tr></table></figure>
+<h5 id="第三步：进入mysql修改root密码"><a href="#第三步：进入mysql修改root密码" class="headerlink" title="第三步：进入mysql修改root密码"></a>第三步：进入mysql修改root密码</h5><p>Mysql root用户密码重置<br>登录mysql，并修改密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p      <span class="comment">#----要求输入密码时，直接回车即可。</span></div></pre></td></tr></table></figure>
+<p>执行下面的sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">use</span> mysql;</div><div class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> <span class="keyword">password</span>=<span class="keyword">PASSWORD</span>(<span class="string">'12345678'</span>) <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">"root"</span>;  </div><div class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</div><div class="line">quit</div></pre></td></tr></table></figure>
+<h5 id="第四步：重置完成恢复服务"><a href="#第四步：重置完成恢复服务" class="headerlink" title="第四步：重置完成恢复服务"></a>第四步：重置完成恢复服务</h5><p>Mysql root用户密码重置<br>杀死mysqld_safe进程，并重启mysql。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">kill</span> -9  11283  <span class="comment">#(11283为mysqld_safe进程）</span></div><div class="line">service mysql start</div><div class="line">mysql -uroot -p     <span class="comment">#(输入密码12345678即可）</span></div></pre></td></tr></table></figure>
+<p>#####Mysql root用户密码重置成功</p>
 
       
 
@@ -230,25 +207,6 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -299,7 +257,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/Hadoop基础学习八/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/07/mysql重置密码步骤/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -313,18 +271,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2017/07/04/Hadoop基础学习九/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Hadoop基础学习九
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/07/04/Hadoop基础学习六/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hadoop基础学习六</div>
+    <a href="/2017/07/07/SSR一键搭建和管理脚本/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
       <i class="icon-circle-right"></i>
     </a>
   
