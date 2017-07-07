@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>一个技术渣的自我剖析</title>
+  <title>SSR一键部署和多用户管理Bash | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
+  <meta name="description" content="SSR一键部署和多用户管理Bash功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接">
+<meta name="keywords" content="SSR,翻墙技术,实用技巧">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个技术渣的自我剖析">
+<meta property="og:title" content="SSR一键部署和多用户管理Bash">
 <meta property="og:url" content="https://z306223558.github.io/2017/07/07/SSR一键搭建和管理脚本/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
-<meta property="og:updated_time" content="2017-07-07T03:15:03.000Z">
+<meta property="og:description" content="SSR一键部署和多用户管理Bash功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接">
+<meta property="og:updated_time" content="2017-07-07T03:19:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个技术渣的自我剖析">
-<meta name="twitter:description" content="新的SSR多用户管理脚本功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接以取得最好">
+<meta name="twitter:title" content="SSR一键部署和多用户管理Bash">
+<meta name="twitter:description" content="SSR一键部署和多用户管理Bash功能介绍 一键开启、关闭SSR服务添加、删除、修改用户端口和密码自由限制用户端口流量使用自动修改防火墙规则自助修改SSR加密方式、协议、混淆等参数自动统计，方便查询每个用户端口的流量使用情况自动安装Libsodium库以支持Chacha20等加密方式每月自动清空用户流量一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）  安装脚本（请使用 Xshell 连接">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -166,9 +167,24 @@ var _hmt = _hmt || [];
             <article id="post-SSR一键搭建和管理脚本" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SSR一键部署和多用户管理Bash
+    </h1>
+  
+
+        
+        <a href="/2017/07/07/SSR一键搭建和管理脚本/" class="archive-article-date">
+  	<time datetime="2017-07-07T03:17:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-07</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="新的SSR多用户管理脚本"><a href="#新的SSR多用户管理脚本" class="headerlink" title="新的SSR多用户管理脚本"></a>新的SSR多用户管理脚本</h1><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><blockquote>
+        <h1 id="SSR一键部署和多用户管理Bash"><a href="#SSR一键部署和多用户管理Bash" class="headerlink" title="SSR一键部署和多用户管理Bash"></a>SSR一键部署和多用户管理Bash</h1><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><blockquote>
 <p>一键开启、关闭SSR服务<br>添加、删除、修改用户端口和密码<br>自由限制用户端口流量使用<br>自动修改防火墙规则<br>自助修改SSR加密方式、协议、混淆等参数<br>自动统计，方便查询每个用户端口的流量使用情况<br>自动安装Libsodium库以支持Chacha20等加密方式<br>每月自动清空用户流量<br>一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）</p>
 </blockquote>
 <h3 id="安装脚本"><a href="#安装脚本" class="headerlink" title="安装脚本"></a>安装脚本</h3><p>（请使用 Xshell 连接以取得最好的中文编码支持）</p>
@@ -220,6 +236,25 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSR</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">翻墙技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">实用技巧</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -284,18 +319,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2017/07/07/mysql重置密码步骤/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/07/04/Hadoop基础学习七/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hadoop基础学习七</div>
+    <a href="/2017/07/07/mysql重置密码步骤/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -412,6 +438,18 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hadoop生态圈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SSR</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">翻墙技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">实用技巧</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -164,54 +164,27 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-mysql重置密码步骤" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="忘记Mysql密码重设密码方法"><a href="#忘记Mysql密码重设密码方法" class="headerlink" title="忘记Mysql密码重设密码方法"></a>忘记Mysql密码重设密码方法</h1><h3 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h3><h5 id="第一步：停止mysql服务"><a href="#第一步：停止mysql服务" class="headerlink" title="第一步：停止mysql服务"></a>第一步：停止mysql服务</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql stop</div></pre></td></tr></table></figure>
-<h5 id="第二步-启动mysqld-safe"><a href="#第二步-启动mysqld-safe" class="headerlink" title="第二步: 启动mysqld_safe"></a>第二步: 启动mysqld_safe</h5><p>启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqld_safe --skip-grant-tables &amp;</div></pre></td></tr></table></figure>
-<h5 id="第三步：进入mysql修改root密码"><a href="#第三步：进入mysql修改root密码" class="headerlink" title="第三步：进入mysql修改root密码"></a>第三步：进入mysql修改root密码</h5><p>Mysql root用户密码重置<br>登录mysql，并修改密码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p      <span class="comment">#----要求输入密码时，直接回车即可。</span></div></pre></td></tr></table></figure>
-<p>执行下面的sql</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">use</span> mysql;</div><div class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> <span class="keyword">password</span>=<span class="keyword">PASSWORD</span>(<span class="string">'12345678'</span>) <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">"root"</span>;  </div><div class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</div><div class="line">quit</div></pre></td></tr></table></figure>
-<h5 id="第四步：重置完成恢复服务"><a href="#第四步：重置完成恢复服务" class="headerlink" title="第四步：重置完成恢复服务"></a>第四步：重置完成恢复服务</h5><p>Mysql root用户密码重置<br>杀死mysqld_safe进程，并重启mysql。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">kill</span> -9  11283  <span class="comment">#(11283为mysqld_safe进程）</span></div><div class="line">service mysql start</div><div class="line">mysql -uroot -p     <span class="comment">#(输入密码12345678即可）</span></div></pre></td></tr></table></figure>
-<p>#####Mysql root用户密码重置成功</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/07/mysql重置密码步骤/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
     <article id="post-SSR一键搭建和管理脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/07/SSR一键搭建和管理脚本/">SSR一键部署和多用户管理Bash</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/07/SSR一键搭建和管理脚本/" class="archive-article-date">
+  	<time datetime="2017-07-07T03:17:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-07</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="新的SSR多用户管理脚本"><a href="#新的SSR多用户管理脚本" class="headerlink" title="新的SSR多用户管理脚本"></a>新的SSR多用户管理脚本</h1><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><blockquote>
+        <h1 id="SSR一键部署和多用户管理Bash"><a href="#SSR一键部署和多用户管理Bash" class="headerlink" title="SSR一键部署和多用户管理Bash"></a>SSR一键部署和多用户管理Bash</h1><h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><blockquote>
 <p>一键开启、关闭SSR服务<br>添加、删除、修改用户端口和密码<br>自由限制用户端口流量使用<br>自动修改防火墙规则<br>自助修改SSR加密方式、协议、混淆等参数<br>自动统计，方便查询每个用户端口的流量使用情况<br>自动安装Libsodium库以支持Chacha20等加密方式<br>每月自动清空用户流量<br>一键封禁BT下载、垃圾邮件发送功能。（感谢逗比大佬提供）</p>
 </blockquote>
 <h3 id="安装脚本"><a href="#安装脚本" class="headerlink" title="安装脚本"></a>安装脚本</h3><p>（请使用 Xshell 连接以取得最好的中文编码支持）</p>
@@ -242,11 +215,72 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSR</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">翻墙技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">实用技巧</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/07/07/SSR一键搭建和管理脚本/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-mysql重置密码步骤" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="忘记Mysql密码重设密码方法"><a href="#忘记Mysql密码重设密码方法" class="headerlink" title="忘记Mysql密码重设密码方法"></a>忘记Mysql密码重设密码方法</h1><h3 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h3><h5 id="第一步：停止mysql服务"><a href="#第一步：停止mysql服务" class="headerlink" title="第一步：停止mysql服务"></a>第一步：停止mysql服务</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql stop</div></pre></td></tr></table></figure>
+<h5 id="第二步-启动mysqld-safe"><a href="#第二步-启动mysqld-safe" class="headerlink" title="第二步: 启动mysqld_safe"></a>第二步: 启动mysqld_safe</h5><p>启动mysql的安全模式，这时要注意跳过启动授权表。启动时加上skip-grant-tables参数目的是在启动mysql时不启动grant-tables，授权表。这样就可以修改root的密码了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqld_safe --skip-grant-tables &amp;</div></pre></td></tr></table></figure>
+<h5 id="第三步：进入mysql修改root密码"><a href="#第三步：进入mysql修改root密码" class="headerlink" title="第三步：进入mysql修改root密码"></a>第三步：进入mysql修改root密码</h5><p>Mysql root用户密码重置<br>登录mysql，并修改密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p      <span class="comment">#----要求输入密码时，直接回车即可。</span></div></pre></td></tr></table></figure>
+<p>执行下面的sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">use</span> mysql;</div><div class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> <span class="keyword">password</span>=<span class="keyword">PASSWORD</span>(<span class="string">'12345678'</span>) <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">"root"</span>;  </div><div class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</div><div class="line">quit</div></pre></td></tr></table></figure>
+<h5 id="第四步：重置完成恢复服务"><a href="#第四步：重置完成恢复服务" class="headerlink" title="第四步：重置完成恢复服务"></a>第四步：重置完成恢复服务</h5><p>Mysql root用户密码重置<br>杀死mysqld_safe进程，并重启mysql。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">kill</span> -9  11283  <span class="comment">#(11283为mysqld_safe进程）</span></div><div class="line">service mysql start</div><div class="line">mysql -uroot -p     <span class="comment">#(输入密码12345678即可）</span></div></pre></td></tr></table></figure>
+<p>#####Mysql root用户密码重置成功</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/07/mysql重置密码步骤/">展开全文 >></a>
         </p>
       
 
@@ -445,6 +479,78 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Hadoop基础学习九" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/04/Hadoop基础学习九/">Hadoop基础学习九</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/04/Hadoop基础学习九/" class="archive-article-date">
+  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Hadoop第九天第一节"><a href="#Hadoop第九天第一节" class="headerlink" title="Hadoop第九天第一节"></a>Hadoop第九天第一节</h1><h3 id="回顾知识"><a href="#回顾知识" class="headerlink" title="回顾知识"></a>回顾知识</h3><ol>
+<li>mapred的运行过程<br>分为2个阶段，第一个叫map task，第二个叫reduce task<br>由appmaster来协调<br>由yarn提供启动运行</li>
+</ol>
+<p>到底map会启动几个，reduce启动几个？<br>map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块<br>切片的大小可以调整，maxsize minsize<br>map启动完成后完全并行操作，互不相干</p>
+<p>reduce的数量<br>reduce是由map产生的中间结果来作为输入的<br>所以相同的单词会汇聚到一个相同的reduce 进程<br>map把数据生成后会对数据做分区<br>通过getPartiton插件方法，传入reduce的数量做hash除法</p>
+<p>reduce的输出可以更改名字</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/04/Hadoop基础学习九/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-Hadoop基础学习八-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -506,78 +612,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/07/04/Hadoop基础学习八-3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
-    <article id="post-Hadoop基础学习九" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/04/Hadoop基础学习九/">Hadoop基础学习九</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/04/Hadoop基础学习九/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Hadoop第九天第一节"><a href="#Hadoop第九天第一节" class="headerlink" title="Hadoop第九天第一节"></a>Hadoop第九天第一节</h1><h3 id="回顾知识"><a href="#回顾知识" class="headerlink" title="回顾知识"></a>回顾知识</h3><ol>
-<li>mapred的运行过程<br>分为2个阶段，第一个叫map task，第二个叫reduce task<br>由appmaster来协调<br>由yarn提供启动运行</li>
-</ol>
-<p>到底map会启动几个，reduce启动几个？<br>map的数量是由数据切片的多少来决定的，最后一块为block的1.1倍时会直接保存为1块而不会切成2块<br>切片的大小可以调整，maxsize minsize<br>map启动完成后完全并行操作，互不相干</p>
-<p>reduce的数量<br>reduce是由map产生的中间结果来作为输入的<br>所以相同的单词会汇聚到一个相同的reduce 进程<br>map把数据生成后会对数据做分区<br>通过getPartiton插件方法，传入reduce的数量做hash除法</p>
-<p>reduce的输出可以更改名字</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/04/Hadoop基础学习九/">展开全文 >></a>
         </p>
       
 
@@ -1111,6 +1145,18 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hadoop生态圈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SSR</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">翻墙技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">实用技巧</a>
               </li>
              
               <li class="article-tag-list-item">
