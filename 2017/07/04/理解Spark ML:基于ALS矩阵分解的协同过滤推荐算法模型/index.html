@@ -6,17 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://z306223558.github.io">
-  <title>Archives: 2017/7 | 一个技术渣的自我剖析</title>
+  <title>理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型 | 一个技术渣的自我剖析</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="一个技术渣的自我剖析">
-<meta property="og:url" content="https://z306223558.github.io/archives/2017/07/index.html">
+  <meta name="description" content="理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型1. 引言随着互联网的迅猛发展,为了满足人们在繁多的信息中获取自己需要内容的需求,个性化推荐应用而生。协同过滤推荐是其中运用最为成功的技术之一。其中,基于用户的最近邻法根据相似用户的评分来预测当前用户的评分。然而,在用户数量以及用户评分不足的情况下,该方法存在冷启动和数据稀疏的问题。为了解决这两个问题，业界提出了提出了基于项的最近邻法，">
+<meta name="keywords" content="Spark,MLlib,ALS,算法模型,推荐,协同过滤">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Spark ML&#x2F;基于ALS矩阵分解的协同过滤推荐算法模型">
+<meta property="og:url" content="https://z306223558.github.io/2017/07/04/理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型/index.html">
 <meta property="og:site_name" content="一个技术渣的自我剖析">
-<meta property="og:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta property="og:description" content="理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型1. 引言随着互联网的迅猛发展,为了满足人们在繁多的信息中获取自己需要内容的需求,个性化推荐应用而生。协同过滤推荐是其中运用最为成功的技术之一。其中,基于用户的最近邻法根据相似用户的评分来预测当前用户的评分。然而,在用户数量以及用户评分不足的情况下,该方法存在冷启动和数据稀疏的问题。为了解决这两个问题，业界提出了提出了基于项的最近邻法，">
+<meta property="og:image" content="http://img.blog.csdn.net/20161221140946486?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20161229194130619?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20161227211626421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170123132029191?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170123133327994?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-09-18T02:38:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个技术渣的自我剖析">
-<meta name="twitter:description" content="个人技术博客，本人实属技术渣一名，PHP入道，后面干过Python后台，比较熟悉torando框架。python水平一般，后面转到NodeJS后台开发，写过几个小中型网站，前后台功能都独立开发，熟悉NodeJS的Parse框架。现在在做大数据开发，开始熟悉Hadoop，Spark等大数据开发工具。正在摸索PySpark，Scala等技术">
+<meta name="twitter:title" content="理解Spark ML&#x2F;基于ALS矩阵分解的协同过滤推荐算法模型">
+<meta name="twitter:description" content="理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型1. 引言随着互联网的迅猛发展,为了满足人们在繁多的信息中获取自己需要内容的需求,个性化推荐应用而生。协同过滤推荐是其中运用最为成功的技术之一。其中,基于用户的最近邻法根据相似用户的评分来预测当前用户的评分。然而,在用户数量以及用户评分不足的情况下,该方法存在冷启动和数据稀疏的问题。为了解决这两个问题，业界提出了提出了基于项的最近邻法，">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161221140946486?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
   
     <link rel="alternative" href="/atom.xml" title="一个技术渣的自我剖析" type="application/atom+xml">
   
@@ -162,333 +170,306 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/07/SSR一键搭建和管理脚本/" class="archive-article-date">
-  	<time datetime="2017-07-07T03:17:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-07</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/07/SSR一键搭建和管理脚本/">SSR一键部署和多用户管理Bash</a>
+    <h1 class="article-title" itemprop="name">
+      理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSR</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">翻墙技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">实用技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/07/mysql重置密码步骤/" class="archive-article-date">
-  	<time datetime="2017-07-07T03:15:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/Hadoop基础学习七/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/Hadoop基础学习七/">Hadoop基础学习七</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/Hadoop基础学习九/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/Hadoop基础学习九/">Hadoop基础学习九</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/Hadoop基础学习八-3/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/Hadoop基础学习八-3/">Hadoop基础学习八-3</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/Hadoop基础学习八/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/Hadoop基础学习八/">Hadoop基础学习八</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/Hadoop基础学习六/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/Hadoop基础学习六/">Hadoop基础学习六</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hadoop</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">大数据基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hadoop生态圈</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型/" class="archive-article-date">
+        
+        <a href="/2017/07/04/理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型/" class="archive-article-date">
   	<time datetime="2017-07-04T03:29:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型/">理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="理解Spark-ML-基于ALS矩阵分解的协同过滤推荐算法模型"><a href="#理解Spark-ML-基于ALS矩阵分解的协同过滤推荐算法模型" class="headerlink" title="理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型"></a>理解Spark ML/基于ALS矩阵分解的协同过滤推荐算法模型</h1><h1 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h1><p>随着互联网的迅猛发展,为了满足人们在繁多的信息中获取自己需要内容的需求,个性化推荐应用而生。协同过滤推荐是其中运用最为成功的技术之一。其中,基于用户的最近邻法根据相似用户的评分来预测当前用户的评分。然而,在用户数量以及用户评分不足的情况下,该方法存在冷启动和数据稀疏的问题。为了解决这两个问题，业界提出了提出了基于项的最近邻法，利用项之间相似性稳定的特点可以离线计算相似性,降低了在线计算量,提高了推荐效率,但同样存在冷启动和数据稀疏问题。若使用 矩 阵 分 解 中 的 奇 异 值 分 解 ( Singular Value Decomposition,SVD) 减少评分矩阵的维数,之后应用最近邻法预测评分,一定程度上解决了同义词问题,但由于评分矩阵中大部分的评分是分解之前填充的,所以得到的特征矩阵不能直接用于评分。业界还提出了一种基于矩阵分解和用户近邻模型的算法,解决了数据稀疏的问题,但存在模型过拟合的问题。而协同过滤提出了一种支持不完整评分矩阵的矩阵分解方法,不用对评分矩阵进行估值填充,有很好的推荐精度。在 <code>Netflix</code>推荐系统竞赛中的应用表明,该矩阵分解相对于其他的推荐算法能产生更精确的推荐。[1 2]</p>
+<p>在矩阵分解推荐算法中,每项评分预测都需要整合现有评分集的信息。随着用户数与项目数的增长,算法的计算量也会随着增长,单机模式的推荐算法逐渐难以满足算法的计算以及推送的即时性需求,因此分布式推荐算法成为推荐算法中研究的一个新的方向。业界提出了分布式的矩阵分解算法,为矩阵分解的并行计算提供了一种可行的解决方案,但其使用的<code>MapReduce</code>框架在各计算节点的迭代计算中会产生过多的磁盘文件读写操作,影响了算法的执行效率。</p>
+<p>本文旨在深入与<code>Spark</code>并行计算框架结合,探索协同过滤算法原理与在<code>Spark</code>上的实现,来解决大数据情况下矩阵分解推荐算法时间代价过高的问题。</p>
+<h1 id="2-基于ALS矩阵分解协同过滤算法"><a href="#2-基于ALS矩阵分解协同过滤算法" class="headerlink" title="2. 基于ALS矩阵分解协同过滤算法"></a>2. 基于ALS矩阵分解协同过滤算法</h1><p>如上述提及的，协同过滤提出了一种支持不完整评分矩阵的矩阵分解方法,不用对评分矩阵进行估值填充,有很好的推荐精度。<code>Spark MLlib</code>中实现的基于<code>ALS</code>矩阵分解协同过滤算法。下面我们来介绍下ALS矩阵分解</p>
+<h2 id="2-1-矩阵分解模型"><a href="#2-1-矩阵分解模型" class="headerlink" title="2.1 矩阵分解模型"></a>2.1 矩阵分解模型</h2><p>用户对物品的打分行为可以表示成一个评分矩阵<code>A(m*n)</code>，表示m个用户对n各物品的打分情况。如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">U\V</th>
+<th style="text-align:center">v1</th>
+<th style="text-align:right">v2</th>
+<th style="text-align:right">v3</th>
+<th style="text-align:right">v4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">u1</td>
+<td style="text-align:center">4</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">?</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td style="text-align:left">u2</td>
+<td style="text-align:center">?</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td style="text-align:left">u3</td>
+<td style="text-align:center">?</td>
+<td style="text-align:right">?</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td style="text-align:left">u4</td>
+<td style="text-align:center">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td style="text-align:left">u5</td>
+<td style="text-align:center">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">?</td>
+</tr>
+</tbody>
+</table>
+<p>其中，A(i,j)表示用户useri对物品itemj的打分。但是，用户不会对所以物品打分，表中”？”表示用户没有打分的情况，所以这个矩阵A很多元素都是空的，我们称其为“缺失值（missing value）”。协同过滤提出了一种支持不完整评分矩阵的矩阵分解方法,不用对评分矩阵进行估值填充。在推荐系统中，我们希望得到用户对所有物品的打分情况，如果用户没有对一个物品打分，那么就需要预测用户是否会对该物品打分，以及会打多少分。这就是所谓的“矩阵补全（填空）”。</p>
+<p>ALS 的核心假设是：打分矩阵A是近似低秩的，即一个m∗n的打分矩阵 A 可以用两个小矩阵U(m∗k)和V(n∗k)的乘积来近似：</p>
+<p>A≈UVT,km,n</p>
+<p>我们把打分理解成相似度，那么“打分矩阵A(m∗n)”就可以由“用户喜好特征矩阵U(m∗k)”和“产品特征矩阵V(n∗k)”的乘积。</p>
+<h2 id="2-2-交替最小二乘法（ALS）"><a href="#2-2-交替最小二乘法（ALS）" class="headerlink" title="2.2 交替最小二乘法（ALS）"></a>2.2 交替最小二乘法（ALS）</h2><p>我们使用用户喜好特征矩阵U(m∗k)中的第i个用户的特征向量ui，和产品特征矩阵V(n∗k)第j个产品的特征向量vj来预测打分矩阵A(m∗n)中的aij。我们可以得出一下的矩阵分解模型的损失函数为：</p>
+<p>C=∑(i,j)∈R[(aij−uivTj)2+λ(u2i+v2j)]</p>
+<p>有了损失函数之后，下面就开始介绍优化方法。通常的优化方法分为两种：交叉最小二乘法（alternative least squares）和随机梯度下降法（stochastic gradient descent）。Spark使用的是交叉最小二乘法（ALS）来最优化损失函数。算法的思想就是：我们先随机生成然后固定它求解，再固定求解，这样交替进行下去，直到取得最优解min(C)。因为每步迭代都会降低误差，并且误差是有下界的，所以 ALS 一定会收敛。但由于问题是非凸的，ALS 并不保证会收敛到全局最优解。但在实际应用中，ALS 对初始点不是很敏感，是否全局最优解造成的影响并不大。</p>
+<blockquote>
+<p>算法的执行步骤：</p>
+<ul>
+<li>先随机生成一个。一般可以取0值或者全局均值。</li>
+<li>固定，即认为是已知的常量，来求解：<br>  C=∑(i,j)∈R[(aij−u(0)ivTj)2+λ((u2i)(0)+v2j)]<br>  由于上式中只有vj一个未知变量，因此C的最优化问题转化为最小二乘问题，用最小二乘法求解vj的最优解：<br>  固定j,j∈(1,2,…,n)，则：等式两边关于为vj求导得：</li>
+</ul>
+<pre><code>d(c)d(vj) 
+=dd(vj)(∑i=1m[(aij−u(0)ivTj)2+λ((u2i)(0)+v2j)]) 
+=∑i=1m[2(aij−u(0)ivTj)(−(uTi)(0))+2λvj] 
+=2∑i=1m[(u(0)i(uTi)(0)+λ)vj−aij(uTi)(0)]
 
-        <div class="article-info info-on-right">
-          
+
+
+令d(c)d(vj)=0，可得： 
+∑i=1m[(u(0)i(uTi)(0)+λ)vj]=∑i=1maij(uTi)(0) 
+=&gt;(U(0)(UT)(0)+λE)vj=aTjU(0)
+
+
+
+令 M1=U(0)(UT)(0)+λE,M2=aTjU(0)，则vj=M−11M2 
+按照上式依次计算v1，v2，...，vn，从而得到V(0)
+</code></pre><ul>
+<li>同理，用步骤2中类似的方法:<br>  C=∑(i,j)∈R[(aij−ui(vTj)(0))2+λ(u2i+(v2j)(0))]<br>  固定i,i∈(1,2,…,m)，则：等式两边关于为ui求导得：</li>
+</ul>
+<pre><code>d(c)d(ui) 
+=dd(ui)(∑j=1n[(aij−ui(vTj)(0))2+λ((u2i)+(v2j)(0))]) 
+=∑j=1n[2(aij−ui(vTj)(0))(−(vTj)(0))+2λui] 
+=2∑j=1n[(v(0)j(vTj)(0)+λ)ui−aij(vTj)(0)]
+
+
+
+令d(c)d(ui)=0，可得： 
+∑j=1n[(v(0)j(vTj)(0)+λ)ui]=∑j=1naij(vTj)(0) 
+=&gt;((V(0)(VT)(0)+λE)ui=aTiV(0) 
+令 M1=V(0)(VT)(0)+λE,M2=aTiV(0)，则ui=M−11M2 
+按照上式依次计算u1，u2，...，un，从而得到U(1)
+</code></pre><ul>
+<li>循环执行步骤2、3，直到损失函数C的值收敛（或者设置一个迭代次数N，迭代执行步骤2、3，N次后停止）。这样，就得到了C最优解对应的矩阵U、V。</li>
+</ul>
+</blockquote>
+<h2 id="2-3-显示反馈与隐式反馈"><a href="#2-3-显示反馈与隐式反馈" class="headerlink" title="2.3 显示反馈与隐式反馈"></a>2.3 显示反馈与隐式反馈</h2><p>推荐系统依赖不同类型的输入数据，最方便的是高质量的显式反馈数据，它们包含用户对感兴趣商品明确的评价。例如，Netflix收集的用户对电影评价的星星等级数据。但是显式反馈数据不一定总是找得到，因此推荐系统可以从更丰富的隐式反馈信息中推测用户的偏好。</p>
+<p>隐式反馈类型包括购买历史、浏览历史、搜索模式甚至鼠标动作。例如，购买同一个作者许多书的用户可能喜欢这个作者。</p>
+<p>许多研究都集中在处理显式反馈，然而在很多应用场景下，应用程序重点关注隐式反馈数据。因为可能用户不愿意评价商品或者由于系统限制我们不能收集显式反馈数据。在隐式模型中，一旦用户允许收集可用的数据，在客户端并不需要额外的显式数据。</p>
+<p>了解隐式反馈的特点非常重要，因为这些特质使我们避免了直接调用基于显式反馈的算法。最主要的特点有如下几种：</p>
+<ul>
+<li>没有负反馈。通过观察用户行为，我们可以推测那个商品他可能喜欢，然后购买，但是我们很难推测哪个商品用户不喜欢。这在显式反馈算法中并不存在，因为用户明确告诉了我们哪些他喜欢哪些他不喜欢。</li>
+<li>隐式反馈是内在的噪音。虽然我们拼命的追踪用户行为，但是我们仅仅只是猜测他们的偏好和真实动机。例如，我们可能知道一个人的购买行为，但是这并不能完全说明偏好和动机，因为这个商品可能作为礼物被购买而用户并不喜欢它。</li>
+<li>显示反馈的数值值表示偏好（preference），隐式回馈的数值值表示信任（confidence）。基于显示反馈的系统用星星等级让用户表达他们的喜好程度，例如一颗星表示很不喜欢，五颗星表示非常喜欢。基于隐式反馈的数值值描述的是动作的频率，例如用户购买特定商品的次数。一个较大的值并不能表明更多的偏爱。但是这个值是有用的，它描述了在一个特定观察中的信任度。<br>  一个发生一次的事件可能对用户偏爱没有用，但是一个周期性事件更可能反映一个用户的选择。</li>
+<li>评价隐式反馈推荐系统需要合适的手段。</li>
+</ul>
+<h3 id="2-3-1-显式反馈模型"><a href="#2-3-1-显式反馈模型" class="headerlink" title="2.3.1 显式反馈模型"></a>2.3.1 显式反馈模型</h3><p>潜在因素模型由一个针对协同过滤的交替方法组成，它以一个更加全面的方式发现潜在特征来解释观察的ratings数据。我们关注的模型由奇异值分解（SVD）推演而来。一个典型的模型将每个用户u（包含一个用户-因素向量ui）和每个商品v（包含一个用户-因素向量vj）联系起来。<br>预测通过内积rij=(uT)ivj来实现。另一个需要关注的地方是参数估计。许多当前的工作都应用到了显式反馈数据集中，这些模型仅仅基于观察到的rating数据直接建模，同时通过一个适当的正则化来避免过拟合。公式就如上一节所提到的：</p>
+<p>minu,v∑(i,j)∈R[(aij−uivTj)2+λ(u2i+v2j)]</p>
+<h3 id="2-3-2-隐式反馈模型"><a href="#2-3-2-隐式反馈模型" class="headerlink" title="2.3.2 隐式反馈模型"></a>2.3.2 隐式反馈模型</h3><p>在显式反馈的基础上，我们需要做一些改动得到我们的隐式反馈模型。首先，我们需要形式化由rij变量衡量的信任度的概念。我们引入了一组二元变量pij ，它表示用户u对商品v的偏好。pij的公式如下：</p>
+<p>pij={1,rij&gt;00,rij=0</p>
+<p>换句话说，如果用户购买了商品，我们认为用户喜欢该商品，否则我们认为用户不喜欢该商品。然而我们的信念（beliefs）与变化的信任（confidence）等级息息相关。首先，很自然的，pij的值为0和低信任有关。用户对一个商品没有得到一个正的偏好可能源于多方面的原因，并不一定是不喜欢该商品。例如，用户可能并不知道该商品的存在。<br>另外，用户购买一个商品也并不一定是用户喜欢它。因此我们需要一个新的信任等级来显示用户偏爱某个商品。一般情况下，rij越大，越能暗示用户喜欢某个商品。因此，我们引入了一组变量cij，它衡量了我们观察到pij的信任度。cij一个合理的选择如下所示：</p>
+<p>cij=1+αrij</p>
+<p>按照这种方式，我们存在最小限度的信任度，并且随着我们观察到的正偏向的证据越来越多，信任度也会越来越大。</p>
+<p>我们的目的是找到用户向量ui以及商品向量vj来表明用户偏好。这些向量分别是用户因素（特征）向量和商品因素（特征）向量。本质上，这些向量将用户和商品映射到一个公用的隐式因素空间，从而使它们可以直接比较。这和用于显式数据集的矩阵分解技术类似，但是包含两点不一样的地方：<br>（1）我们需要考虑不同的信任度<br>（2）最优化需要考虑所有可能的u，v对，而不仅仅是和观察数据相关的u，v对。因此，通过最小化下面的损失函数来计算相关因素（factors）:<br>minu,v∑(i,j)∈R[cij(aij−uivTj)2+λ(u2i+v2j)]</p>
+<h1 id="3-Spark-MLlib-ALS"><a href="#3-Spark-MLlib-ALS" class="headerlink" title="3. Spark MLlib ALS"></a>3. Spark MLlib ALS</h1><p>在接下来的实例中, 我们将加载来着MovieLens数据集, 每行包含了用户ID, 电影ID,该用户对该电影的评分以及时间戳.</p>
+<h2 id="3-1-训练模型"><a href="#3-1-训练模型" class="headerlink" title="3.1 训练模型"></a>3.1 训练模型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">import org.apache.spark.ml.evaluation.RegressionEvaluator</div><div class="line">import org.apache.spark.ml.recommendation.ALS</div><div class="line"></div><div class="line">case class Rating(userId: Int, movieId: Int, rating: Float, timestamp: Long)</div><div class="line">def parseRating(str: String): Rating = &#123;</div><div class="line">  val fields = str.split(&quot;::&quot;)</div><div class="line">  assert(fields.size == 4)</div><div class="line">  Rating(fields(0).toInt, fields(1).toInt, fields(2).toFloat, fields(3).toLong)</div><div class="line">&#125;</div><div class="line"></div><div class="line">val ratings = spark.read.textFile(&quot;data/mllib/als/sample_movielens_ratings.txt&quot;)</div><div class="line">  .map(parseRating)</div><div class="line">  .toDF()</div><div class="line">val Array(training, test) = ratings.randomSplit(Array(0.8, 0.2))</div><div class="line"></div><div class="line">val als = new ALS()</div><div class="line">  .setRank(12)</div><div class="line">  .setMaxIter(50)</div><div class="line">  .setRegParam(0.01)</div><div class="line">  .setUserCol(&quot;userId&quot;)</div><div class="line">  .setItemCol(&quot;movieId&quot;)</div><div class="line">  .setRatingCol(&quot;rating&quot;)</div><div class="line">val model = als.fit(training)</div><div class="line"></div><div class="line">val predictions = model.transform(test)</div></pre></td></tr></table></figure>
+<ul>
+<li>Rank: 对应ALS模型中的因子个数，即矩阵分解出的两个矩阵的新的行/列数，即A≈UVT,km,n中的k。</li>
+<li>MaxIter: 对应运行时的最大迭代次数</li>
+<li>RegParam: 控制模型的正则化过程，从而控制模型的过拟合情况。</li>
+</ul>
+<h2 id="3-2-基于物品的推荐系统"><a href="#3-2-基于物品的推荐系统" class="headerlink" title="3.2 基于物品的推荐系统"></a>3.2 基于物品的推荐系统</h2><p>物品推荐，给定一个物品，哪些物品和它最相似。这里我们使用余弦相似度。假设现在我们有一个测试集特征向量A和一个训练集的特征向量B：</p>
+<blockquote>
+<p>A：[1, 2, 2, 1, 1, 1, 0]<br>B：[1, 2, 2, 1, 1, 2, 1]</p>
+</blockquote>
+<p>到这里，问题就变成了如何计算这两个向量的相似程度。我们可以把它们想象成空间中的两条线段，都是从原点（[0, 0, …]）出发，指向不同的方向。两条线段之间形成一个夹角，如果夹角为0度，意味着方向相同、线段重合；如果夹角为90度，意味着形成直角，方向完全不相似；如果夹角为180度，意味着方向正好相反。因此，我们可以通过夹角的大小，来判断向量的相似程度。夹角越小，就代表越相似。</p>
+<p><img src="http://img.blog.csdn.net/20161221140946486?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>以二维空间为例，上图的a和b是两个向量，我们要计算它们的夹角θ。余弦定理告诉我们，可以用下面的公式求得：</p>
+<p>cosΘ=x1x2+y1y2x21+y21‾‾‾‾‾‾√∗x22+y22‾‾‾‾‾‾√</p>
+<p>拓展到n维向量，假定A和B是两个n维向量，A是 [A1, A2, …, An] ，B是 [B1, B2, …, Bn] ，则A与B的夹角θ的余弦等于：</p>
+<p>cosΘ=Σni=1(Ai∗Bi)Σni=1(Ai)2‾‾‾‾‾‾‾‾‾√∗Σni=1(Bi)2‾‾‾‾‾‾‾‾‾√=A⋅B|A|∗|B|</p>
+<p>使用这个公式，我们就可以得到，特征向量A与特征向量B的夹角的余弦：</p>
+<p>cosΘ=1∗1+2∗2+2∗2+1∗1+1∗1+1∗2+0∗112+22+22+12+12+12+02‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾√∗12+22+22+12+12+22+12‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾√=1312‾‾‾√∗16‾‾‾√=0.938</p>
+<p>余弦值越接近1，就表明夹角越接近0度，也就是两个向量越相似，这就叫”余弦相似度”</p>
+<p>我们这个方案，计算出一条测试集的特征向量与训练集各个特征向量的余弦相似度，将该条测试集的类别标记为与其余弦相似度最大的训练集特征向量所对应的类别。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def cosineSimilarity(vec1: DoubleMatrix, vec2: DoubleMatrix): Double = &#123;</div><div class="line">    vec1.dot(vec2) / (vec1.norm2() * vec2.norm2())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import org.jblas.DoubleMatrix</div><div class="line">val aMatrix = new DoubleMatrix(Array(1.0, 2.0, 3.0))</div></pre></td></tr></table></figure>
+<p>求各个产品的余弦相似度：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val sims = model.productFeatures.map&#123; case (id, factor) =&gt; </div><div class="line">    val factorVector = new DoubleMatrix(factor)</div><div class="line">    val sim = cosineSimilarity(factorVector, itemVector)</div><div class="line">    (id, sim)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>求相似度最高的前10个相识电影。第一名肯定是自己，所以要取前11个，再除去第1个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">val sortedSims2 = sims.top(K + 1)(Ordering.by[(Int, Double), Double] &#123; case (id, similarity) =&gt; similarity &#125;)</div><div class="line">sortedSims2.slice(1, 11).map&#123; case (id, sim) =&gt; (titles(id), sim) &#125;.mkString(&quot;\n&quot;)</div><div class="line">/* </div><div class="line">(Hideaway (1995),0.6932331537649621)</div><div class="line">(Body Snatchers (1993),0.6898690594544726)</div><div class="line">(Evil Dead II (1987),0.6897964975027041)</div><div class="line">(Alien: Resurrection (1997),0.6891221044611473)</div><div class="line">(Stephen King&apos;s The Langoliers (1995),0.6864214133620066)</div><div class="line">(Liar Liar (1997),0.6812075443259535)</div><div class="line">(Tales from the Crypt Presents: Bordello of Blood (1996),0.6754663844488256)</div><div class="line">(Army of Darkness (1993),0.6702643811753909)</div><div class="line">(Mystery Science Theater 3000: The Movie (1996),0.6594872765176396)</div><div class="line">(Scream (1996),0.6538249646863378)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>在ALS矩阵分解基础上，还有很多其他推荐系统实现的方式，这里就不在列举。</p>
+<h1 id="4-ALS矩阵分解算法并行化"><a href="#4-ALS矩阵分解算法并行化" class="headerlink" title="4. ALS矩阵分解算法并行化"></a>4. ALS矩阵分解算法并行化</h1><p>有许多机器学习算法需要将这次迭代权值调优后的结果数据集作为下次迭代的输入，而使用MapReduce计算框架经过一次Reduce操作后输出数据结果写回磁盘，大大的降低的速度。我们所使用的ALS矩阵分解算法也是一种需要迭代的算法，如将上次计算得的U(n)代入下次计算V(n)操作中，再将V(n)带入下次计算Un+1的操作中，以此类推：</p>
+<p><img src="http://img.blog.csdn.net/20161229194130619?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>在Spark框架下的并行化,不同于<code>MapReduce</code>的并行化[3]。Spark RDD允许用户在执行多个查询时显式地将工作集缓存在内存中，后续的查询能够重用工作集，这极大地提升了查询速度。RDD提供了一种高度受限的共享内存模型，即RDD是只读的记录分区的集合，只能通过在其他RDD执行确定的转换操作（如map、join和group by）而创建，然而这些限制使得实现容错的开销很低。</p>
+<p>设计接口的一个关键问题就是，如何表示<code>RDD</code>之间的依赖。<code>RDD</code>之间的依赖关系可以分为两类，即：<br>（1）窄依赖（narrow dependencies）：子<code>RDD</code>的每个分区依赖于常数个父分区（即与数据规模无关）；<br>（2）宽依赖（wide dependencies）：子<code>RDD</code>的每个分区依赖于所有父<code>RDD</code>分区。例如，<code>map</code>产生窄依赖，而<code>join</code>则是宽依赖（除非父<code>RDD</code>被哈希分区）[4]。</p>
+<p><img src="http://img.blog.csdn.net/20161227211626421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>我们也可以这样认为：</p>
+<blockquote>
+<p>窄依赖指的是：每个parent RDD 的 partition 最多被 child RDD的一个partition使用<br>宽依赖指的是：每个parent RDD 的 partition 被多个 child RDD的partition使用</p>
+</blockquote>
+<p>窄依赖每个child RDD 的partition的生成操作都是可以并行的，而宽依赖则需要所有的parent partition shuffle结果得到后再进行。</p>
+<p>我们可以看到公式中：∑i=1m[(u(n)i(uTi)(n)+λ)vj]=∑i=1maij(uTi)(n)，若 parent RDD 中 u(n)i在上一迭代中已经计算出结果，并可以交给下个RDD来计算v(n)j。 所以，parent RDD 和 child RDD 之间是窄依赖，不需要昂贵的shuffle，各个partition的任务可以并行执行。</p>
+<h1 id="5-ALS模型实现"><a href="#5-ALS模型实现" class="headerlink" title="5. ALS模型实现"></a>5. ALS模型实现</h1><p>基于Spark架构，我们可以将迭代算法ALS很好的并行化。本章将详细讲解Spark MLlib 中的ALS模型的实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">val als = new ALS()</div><div class="line">  .setRank(12)</div><div class="line">  .setMaxIter(50)</div><div class="line">  .setRegParam(0.01)</div><div class="line">  .setUserCol(&quot;userId&quot;)</div><div class="line">  .setItemCol(&quot;movieId&quot;)</div><div class="line">  .setRatingCol(&quot;rating&quot;)</div><div class="line">val model = als.fit(training)</div><div class="line"></div><div class="line">val predictions = model.transform(test)</div></pre></td></tr></table></figure>
+<h2 id="5-1-ALS-fit"><a href="#5-1-ALS-fit" class="headerlink" title="5.1 ALS.fit"></a>5.1 ALS.fit</h2><p>首先，我们研究下ALS模型在设置好参数后，是如何fit训练集的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">fit</span></span>(dataset: <span class="type">Dataset</span>[_]): <span class="type">ALSModel</span> = &#123;</div><div class="line">   transformSchema(dataset.schema)        <span class="comment">//(1)</span></div><div class="line">   <span class="keyword">import</span> dataset.sparkSession.implicits._</div><div class="line"></div><div class="line">   <span class="keyword">val</span> r = <span class="keyword">if</span> ($(ratingCol) != <span class="string">""</span>) col($(ratingCol)).cast(<span class="type">FloatType</span>) <span class="keyword">else</span> lit(<span class="number">1.0</span>f) <span class="comment">//（2）</span></div><div class="line">   <span class="keyword">val</span> ratings = dataset</div><div class="line">     .select(checkedCast(col($(userCol)).cast(<span class="type">DoubleType</span>)),</div><div class="line">       checkedCast(col($(itemCol)).cast(<span class="type">DoubleType</span>)), r)</div><div class="line">     .rdd</div><div class="line">     .map &#123; row =&gt;</div><div class="line">       <span class="type">Rating</span>(row.getInt(<span class="number">0</span>), row.getInt(<span class="number">1</span>), row.getFloat(<span class="number">2</span>))</div><div class="line">     &#125;                                      <span class="comment">//（3）</span></div><div class="line">   <span class="keyword">val</span> instrLog = <span class="type">Instrumentation</span>.create(<span class="keyword">this</span>, ratings) <span class="comment">//（4）</span></div><div class="line">   instrLog.logParams(rank, numUserBlocks, numItemBlocks, implicitPrefs, alpha,</div><div class="line">                      userCol, itemCol, ratingCol, predictionCol, maxIter,</div><div class="line">                      regParam, nonnegative, checkpointInterval, seed)   <span class="comment">//（5）</span></div><div class="line">   <span class="keyword">val</span> (userFactors, itemFactors) = <span class="type">ALS</span>.train(ratings, rank = $(rank),</div><div class="line">     numUserBlocks = $(numUserBlocks), numItemBlocks = $(numItemBlocks),</div><div class="line">     maxIter = $(maxIter), regParam = $(regParam), implicitPrefs = $(implicitPrefs),</div><div class="line">     alpha = $(alpha), nonnegative = $(nonnegative),</div><div class="line">     intermediateRDDStorageLevel = <span class="type">StorageLevel</span>.fromString($(intermediateStorageLevel)),</div><div class="line">     finalRDDStorageLevel = <span class="type">StorageLevel</span>.fromString($(finalStorageLevel)),</div><div class="line">     checkpointInterval = $(checkpointInterval), seed = $(seed))  <span class="comment">//（6）</span></div><div class="line">   <span class="keyword">val</span> userDF = userFactors.toDF(<span class="string">"id"</span>, <span class="string">"features"</span>)  <span class="comment">//（7）</span></div><div class="line">   <span class="keyword">val</span> itemDF = itemFactors.toDF(<span class="string">"id"</span>, <span class="string">"features"</span>)  <span class="comment">//（8）</span></div><div class="line">   <span class="keyword">val</span> model = <span class="keyword">new</span> <span class="type">ALSModel</span>(uid, $(rank), userDF, itemDF).setParent(<span class="keyword">this</span>) <span class="comment">//（9）</span></div><div class="line">   instrLog.logSuccess(model)  <span class="comment">//（10）</span></div><div class="line">   copyValues(model)  <span class="comment">//（11）</span></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>(1)： <code>transformSchema</code>函数最终会调用<code>validateAndTransformSchema</code>将dataset的中的<code>validateAndTransformSchema</code>，去检查用户ID、物品ID、评分是否都为数值，并为dataset新增<code>predictionCol</code>的列，其类型为Float。</p>
+<p>(2)(3)：将dataset将用户ID和商品ID转为Int类型，将评分转为Double类型，并生成Rating RDD。</p>
+<p>(4)(5)：生成训练时打印log的仪器并设置参数。</p>
+<p>(6)(7)(8)：训练模型得到用户特征矩阵<code>userFactors</code>和物品特征矩阵itemFactors，并对列重命名得到<code>userDF</code>与<code>itemDF</code>。</p>
+<p>(9)(10)(11)：传入<code>rank, userDF, itemDF</code>创建ALS模型。</p>
+<h2 id="5-2-ALS-train"><a href="#5-2-ALS-train" class="headerlink" title="5.2 ALS.train"></a>5.2 <code>ALS.train</code></h2><p>这一节我们来深入研究下，上节代码（6）中是如何计算出用户特征矩阵userFactors和物品特征矩阵<code>itemFactors</code>的。接下来，我们来逐行分析。</p>
+<h3 id="5-2-1-参数"><a href="#5-2-1-参数" class="headerlink" title="5.2.1 参数"></a>5.2.1 参数</h3><p>我们先来看下ALS.train的参数：</p>
+<p><code>ALS.train</code></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span></span>[<span class="type">ID</span>: <span class="type">ClassTag</span>]( </div><div class="line">    ratings: <span class="type">RDD</span>[<span class="type">Rating</span>[<span class="type">ID</span>]],</div><div class="line">    rank: <span class="type">Int</span> = <span class="number">10</span>,</div><div class="line">    numUserBlocks: <span class="type">Int</span> = <span class="number">10</span>,</div><div class="line">    numItemBlocks: <span class="type">Int</span> = <span class="number">10</span>,</div><div class="line">    maxIter: <span class="type">Int</span> = <span class="number">10</span>,</div><div class="line">    regParam: <span class="type">Double</span> = <span class="number">1.0</span>,</div><div class="line">    implicitPrefs: <span class="type">Boolean</span> = <span class="literal">false</span>,</div><div class="line">    alpha: <span class="type">Double</span> = <span class="number">1.0</span>,</div><div class="line">    nonnegative: <span class="type">Boolean</span> = <span class="literal">false</span>,</div><div class="line">    intermediateRDDStorageLevel: <span class="type">StorageLevel</span> = <span class="type">StorageLevel</span>.<span class="type">MEMORY_AND_DISK</span>,</div><div class="line">    finalRDDStorageLevel: <span class="type">StorageLevel</span> = <span class="type">StorageLevel</span>.<span class="type">MEMORY_AND_DISK</span>,</div><div class="line">    checkpointInterval: <span class="type">Int</span> = <span class="number">10</span>,</div><div class="line">    seed: <span class="type">Long</span> = <span class="number">0</span>L)(</div><div class="line">    <span class="keyword">implicit</span> ord: <span class="type">Ordering</span>[<span class="type">ID</span>]): (<span class="type">RDD</span>[(<span class="type">ID</span>, <span class="type">Array</span>[<span class="type">Float</span>])], <span class="type">RDD</span>[(<span class="type">ID</span>, <span class="type">Array</span>[<span class="type">Float</span>])]) = &#123;</div><div class="line">    ......</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>以上定义中，</p>
+<ul>
+<li>ratings指用户提供的训练数据，它包括用户id集、商品id集以及相应的打分集。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">case class Rating[@specialized(Int, Long) ID](user: ID, item: ID, rating: Float)</div></pre></td></tr></table></figure>
+<ul>
+<li>rank表示隐含因素的数量，也即特征的数量。</li>
+<li>numUserBlocks和numItemBlocks分别指用户和商品的块数量，即分区数量。</li>
+<li>regParam表示最小二乘法中lambda值的大小。</li>
+<li>implicitPrefs表示我们的训练数据是否是隐式反馈数据。</li>
+<li>Nonnegative表示求解的最小二乘的值是否是非负,根据Nonnegative的值的不同，spark使用了不同的求解方法。</li>
+</ul>
+<h3 id="5-2-2-初始化ALSPartitioner和LocalIndexEncoder"><a href="#5-2-2-初始化ALSPartitioner和LocalIndexEncoder" class="headerlink" title="5.2.2 初始化ALSPartitioner和LocalIndexEncoder"></a>5.2.2 初始化<code>ALSPartitioner</code>和<code>LocalIndexEncoder</code></h3><p><code>ALS.train</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">require(intermediateRDDStorageLevel != StorageLevel.NONE,</div><div class="line">  &quot;ALS is not designed to run without persisting intermediate RDDs.&quot;)</div><div class="line">val sc = ratings.sparkContext</div><div class="line">val userPart = new ALSPartitioner(numUserBlocks)</div><div class="line">val itemPart = new ALSPartitioner(numItemBlocks)</div><div class="line">val userLocalIndexEncoder = new LocalIndexEncoder(userPart.numPartitions)</div><div class="line">val itemLocalIndexEncoder = new LocalIndexEncoder(itemPart.numPartitions)</div></pre></td></tr></table></figure>
+<ul>
+<li>ALSPartitioner实现了基于hash的分区，它根据用户或者商品id的hash值来进行分区。ALSPartitioner即HashPartitioner：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private[recommendation] type ALSPartitioner = org.apache.spark.HashPartitioner</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">class HashPartitioner(partitions: Int) extends Partitioner &#123;</div><div class="line">  require(partitions &gt;= 0, s&quot;Number of partitions ($partitions) cannot be negative.&quot;)</div><div class="line"></div><div class="line">  def numPartitions: Int = partitions</div><div class="line"></div><div class="line">  def getPartition(key: Any): Int = key match &#123;</div><div class="line">    case null =&gt; 0</div><div class="line">    case _ =&gt; Utils.nonNegativeMod(key.hashCode, numPartitions)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  override def equals(other: Any): Boolean = other match &#123;</div><div class="line">    case h: HashPartitioner =&gt;</div><div class="line">      h.numPartitions == numPartitions</div><div class="line">    case _ =&gt;</div><div class="line">      false</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  override def hashCode: Int = numPartitions</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>LocalIndexEncoder</code>对<code>（blockid，localindex）</code>即（分区id，分区内索引）进行编码，并将其转换为一个整数，这个整数在高位存分区ID，在低位存对应分区的索引，在空间上尽量做到了不浪费。同时也可以根据这个转换的整数分别获得blockid和localindex。这两个对象在后续的代码中会用到。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">private[recommendation] class LocalIndexEncoder(numBlocks: Int) extends Serializable &#123;</div><div class="line"></div><div class="line">  require(numBlocks &gt; 0, s&quot;numBlocks must be positive but found $numBlocks.&quot;)</div><div class="line"></div><div class="line">  private[this] final val numLocalIndexBits =</div><div class="line">    math.min(java.lang.Integer.numberOfLeadingZeros(numBlocks - 1), 31)</div><div class="line">  private[this] final val localIndexMask = (1 &lt;&lt; numLocalIndexBits) - 1</div><div class="line"></div><div class="line">  /** 将一个(blockId, localIndex) 在一个 integer 中编码 */</div><div class="line">  def encode(blockId: Int, localIndex: Int): Int = &#123;</div><div class="line">    require(blockId &lt; numBlocks)</div><div class="line">    require((localIndex &amp; ~localIndexMask) == 0)</div><div class="line">    (blockId &lt;&lt; numLocalIndexBits) | localIndex</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /** 从编码的index得到 block id */</div><div class="line">  @inline</div><div class="line">  def blockId(encoded: Int): Int = &#123;</div><div class="line">    encoded &gt;&gt;&gt; numLocalIndexBits</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**  从编码的index得到 local index */</div><div class="line">  @inline</div><div class="line">  def localIndex(encoded: Int): Int = &#123;</div><div class="line">    encoded &amp; localIndexMask</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="5-2-3-根据nonnegative参数选择解决矩阵分解的方法"><a href="#5-2-3-根据nonnegative参数选择解决矩阵分解的方法" class="headerlink" title="5.2.3 根据nonnegative参数选择解决矩阵分解的方法"></a>5.2.3 根据<code>nonnegative</code>参数选择解决矩阵分解的方法</h3><p><code>ALS.train</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val solver = if (nonnegative) new NNLSSolver else new CholeskySolver</div></pre></td></tr></table></figure>
+<p>如果需要解的值为非负,即<code>nonnegative</code>为<code>true</code>，那么用非负最小二乘（NNLS）来解，如果没有这个限制，用乔里斯基（Cholesky）分解来解。优化器的工作原理我们会在后续讲解。</p>
+<h3 id="5-2-4-将ratings数据转换为分区的格式"><a href="#5-2-4-将ratings数据转换为分区的格式" class="headerlink" title="5.2.4 将ratings数据转换为分区的格式"></a>5.2.4 将<code>ratings</code>数据转换为分区的格式</h3><p><code>ALS.train</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val blockRatings = partitionRatings(ratings, userPart, itemPart)</div><div class="line">  .persist(intermediateRDDStorageLevel)</div></pre></td></tr></table></figure>
+<p>将ratings数据转换为分区的形式，即（（用户分区id，商品分区id），分区数据集blocks））的形式，并缓存到内存中。其中分区id的计算是通过<code>ALSPartitioner</code>的<code>getPartitions</code>方法获得的，分区数据集由RatingBlock组成，</p>
+<p>它表示（用户分区id，商品分区id ）对所对应的用户id集，商品id集，以及打分集，即（用户id集，商品id集，打分集）。</p>
+<p>我们来看下<code>partitionRatings</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">private def partitionRatings[ID: ClassTag](</div><div class="line">    ratings: RDD[Rating[ID]],</div><div class="line">    srcPart: Partitioner,</div><div class="line">    dstPart: Partitioner): RDD[((Int, Int), RatingBlock[ID])] = &#123;</div><div class="line">    // 计算总共的分区数，默认的 10 × 10</div><div class="line">  val numPartitions = srcPart.numPartitions * dstPart.numPartitions</div><div class="line">  // 对ratings的每个分区进行操作</div><div class="line">  ratings.mapPartitions &#123; iter =&gt;</div><div class="line">  // 用numPartitions个RatingBlockBuilder[ID]一维数组来模拟RatingBlockBuilder[ID]矩阵</div><div class="line">    val builders = Array.fill(numPartitions)(new RatingBlockBuilder[ID])</div><div class="line">    // 对同一分区中每个ratings值操作</div><div class="line">    iter.flatMap &#123; r =&gt;</div><div class="line">      // 得到用户分区id</div><div class="line">      val srcBlockId = srcPart.getPartition(r.user)</div><div class="line">      // 得到商品分区id</div><div class="line">      val dstBlockId = dstPart.getPartition(r.item)</div><div class="line">      // 计算出对应的RatingBlockBuilder[ID]数组中的id</div><div class="line">      val idx = srcBlockId + srcPart.numPartitions * dstBlockId</div><div class="line">      // 得到该 RatingBlockBuilder</div><div class="line">      val builder = builders(idx)</div><div class="line">      // 将 该 ratings值 加入 该builder</div><div class="line">      builder.add(r)</div><div class="line">      // 若该builder&gt;=2048 </div><div class="line">      if (builder.size &gt;= 2048) &#123; // 2048 * (3 * 4) = 24k</div><div class="line">      // </div><div class="line">        builders(idx) = new RatingBlockBuilder</div><div class="line">      // 得到结果</div><div class="line">        Iterator.single(((srcBlockId, dstBlockId), builder.build()))</div><div class="line">      &#125; else &#123;</div><div class="line">        Iterator.empty</div><div class="line">      &#125;</div><div class="line">    &#125; ++ &#123;</div><div class="line">      //上步结束后，若builders有还存在着ratings值builder</div><div class="line">      builders.view.zipWithIndex.filter(_._1.size &gt; 0).map &#123; case (block, idx) =&gt;</div><div class="line">      // 根据 RatingBlockBuilder[ID]数组中的id 反推出 用户分区id和商品分区id</div><div class="line">        val srcBlockId = idx % srcPart.numPartitions</div><div class="line">        val dstBlockId = idx / srcPart.numPartitions</div><div class="line">        // 得到结果</div><div class="line">        ((srcBlockId, dstBlockId), block.build())</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // 根据 （用户分区id，商品分区id） 为key 进行聚合</div><div class="line">    // 然后对 每个值Value 中的 blocks 操作</div><div class="line">  &#125;.groupByKey().mapValues &#123; blocks =&gt;</div><div class="line">    val builder = new RatingBlockBuilder[ID]</div><div class="line">    //  将每个block 合并 到 builder</div><div class="line">    blocks.foreach(builder.merge)</div><div class="line">    // 得到合并后的结果</div><div class="line">    builder.build()</div><div class="line">  &#125;.setName(&quot;ratingBlocks&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="5-2-5-获取inblocks和outblocks数据"><a href="#5-2-5-获取inblocks和outblocks数据" class="headerlink" title="5.2.5 获取inblocks和outblocks数据"></a>5.2.5 获取<code>inblocks</code>和<code>outblocks</code>数据</h3><p>我们知道，通信复杂度是分布式实现一个算法时要重点考虑的问题，不同的实现可能会对性能产生很大的影响。我们假设最坏的情况：即求解商品需要的所有用户特征都需要从其它节点获得。 如下图所示：</p>
+<p><img src="http://img.blog.csdn.net/20170123132029191?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>求解<code>v1</code>需要获得<code>u1,u2</code>，求解<code>v2</code>需要获得<code>u1,u2,u3</code>等，在这种假设下，每步迭代所需的交换数据量是<code>O(m*rank)</code>，其中<code>m</code>表示所有观察到的打分集大小，<code>rank</code>表示特征数量。</p>
+<p>我们知道，如果计算<code>v1</code>和<code>v2</code>是在同一个分区上进行的，那么我们只需要把<code>u1</code>和<code>u2</code>一次发给这个分区就好了，而不需要将<code>u1</code>和<code>u2</code>分别发给<code>v1,v2</code>，这样就省掉了不必要的数据传输。</p>
+<p>下图描述了如何在分区的情况下通过<code>U</code>来求解<code>V</code>，注意节点之间的数据交换量减少了：</p>
+<p><img src="http://img.blog.csdn.net/20170123133327994?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTIzOTQ0Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>使用这种分区结构，我们需要在原始打分数据的基础上额外保存一些信息。</p>
+<p>在<code>Q1</code>中，我们需要知道和<code>v1</code>相关联的用户向量及其对应的打分，从而构建最小二乘问题并求解。<strong><em>这部分数据不仅包含原始打分数据，还包含从每个用户分区收到的向量排序信息，在代码里称作<code>InBlock</code>。</em></strong></p>
+<p>在<code>P1</code>中，我们要知道把<code>u1,u2</code>发给<code>Q1</code>。我们可以<strong><em>查看和<code>u1</code>相关联的所有产品来确定需要把<code>u1</code>发给谁，但每次迭代都扫一遍数据很不划算，所以在<code>spark</code>的实现中只计算一次这个信息，然后把结果通过RDD缓存起来重复使用。这部分数据我们在代码里称作<code>OutBlock</code>。</em></strong></p>
+<p>所以从<code>U</code>求解<code>V</code>，我们需要通过用户的<code>OutBlock</code>信息把用户向量发给商品分区，然后通过商品的<code>InBlock</code>信息构建最小二乘问题并求解。从<code>V</code>求解<code>U</code>，我们需要商品的<code>OutBlock</code>信息和用户的<code>InBlock</code>信息。所有的<code>InBlock</code>和<code>OutBlock</code>信息在迭代过程中都通过RDD缓存。打分数据在用户的<code>InBlock</code>和商品的<code>InBlock</code>各存了一份，但分区方式不同。这么做可以避免在迭代过程中原始数据的交换。</p>
+<p>下面介绍获取<code>InBlock</code>和<code>OutBlock</code>的方法。下面的代码用来分别获取用户和商品的<code>InBlock</code>和<code>OutBlock</code>：</p>
+<p><code>ALS.train</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">val (userInBlocks, userOutBlocks) =</div><div class="line">  makeBlocks(&quot;user&quot;, blockRatings, userPart, itemPart, intermediateRDDStorageLevel)</div><div class="line">userOutBlocks.count()</div><div class="line">// 交换userBlockId和itemBlockId以及其对应的数据</div><div class="line">val swappedBlockRatings = blockRatings.map &#123;</div><div class="line">  case ((userBlockId, itemBlockId), RatingBlock(userIds, itemIds, localRatings)) =&gt;</div><div class="line">    ((itemBlockId, userBlockId), RatingBlock(itemIds, userIds, localRatings))</div><div class="line">&#125;</div><div class="line">val (itemInBlocks, itemOutBlocks) =</div><div class="line">  makeBlocks(&quot;item&quot;, swappedBlockRatings, itemPart, userPart, intermediateRDDStorageLevel)</div><div class="line">itemOutBlocks.count()</div></pre></td></tr></table></figure>
+<p>我们会以求商品的<code>InBlock</code>以及用户的<code>OutBlock</code>为例来分析<code>makeBlocks</code>方法。</p>
+<h4 id="5-2-5-1-InBlock"><a href="#5-2-5-1-InBlock" class="headerlink" title="5.2.5.1 InBlock"></a>5.2.5.1 InBlock</h4><p>下面以求商品的<code>InBlock</code>为例子，则<code>src</code>将代表商品，<code>dst</code>代表着用户。看下<code>makeBlocks</code>方法中的<code>InBlock</code>部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">val inBlocks = ratingBlocks.map &#123;</div><div class="line">// 这部分代码工作主要是：</div><div class="line">// 将用户id映射为该分区中的用户id。</div><div class="line">  case ((srcBlockId, dstBlockId), RatingBlock(srcIds, dstIds, ratings)) =&gt;</div><div class="line">    val start = System.nanoTime()</div><div class="line">    // 用 OpenHashSet 对用户id去重</div><div class="line">    val dstIdSet = new OpenHashSet[ID](1 &lt;&lt; 20)</div><div class="line">    dstIds.foreach(dstIdSet.add)</div><div class="line">    val sortedDstIds = new Array[ID](dstIdSet.size)</div><div class="line">    var i = 0</div><div class="line">    var pos = dstIdSet.nextPos(0)</div><div class="line">    while (pos != -1) &#123;</div><div class="line">      sortedDstIds(i) = dstIdSet.getValue(pos)</div><div class="line">      pos = dstIdSet.nextPos(pos + 1)</div><div class="line">      i += 1</div><div class="line">    &#125;</div><div class="line">    assert(i == dstIdSet.size)</div><div class="line">    // 将用户id 排序</div><div class="line">    Sorting.quickSort(sortedDstIds)</div><div class="line">    val dstIdToLocalIndex = new OpenHashMap[ID, Int](sortedDstIds.length)</div><div class="line">    i = 0</div><div class="line">    // 建立用户id与分区中的用户id（从0开始：0,1,2...）的映射关系</div><div class="line">    while (i &lt; sortedDstIds.length) &#123;</div><div class="line">      dstIdToLocalIndex.update(sortedDstIds(i), i)</div><div class="line">      i += 1</div><div class="line">    &#125;</div><div class="line">    logDebug(</div><div class="line">      &quot;Converting to local indices took &quot; + (System.nanoTime() - start) / 1e9 + &quot; seconds.&quot;)</div><div class="line">      //将用户id 映射为 该分区中的用户id</div><div class="line">    val dstLocalIndices = dstIds.map(dstIdToLocalIndex.apply)</div><div class="line">    // 返回结果为：（商品分区id，（用户分区id，商品id集合，分区中对应的用户id集合，打分集合）</div><div class="line">    (srcBlockId, (dstBlockId, srcIds, dstLocalIndices, ratings))</div><div class="line">    // srcPart的分区进行聚合</div><div class="line">&#125;.groupByKey(new ALSPartitioner(srcPart.numPartitions))</div><div class="line">.mapValues &#123; iter =&gt;</div><div class="line">......</div></pre></td></tr></table></figure>
+<p>可见spark代码实现中，并没有存储用户的真实id，而是存储的使用<code>LocalIndexEncoder</code>生成的编码，这样节省了空间，格式为<code>UncompressedInBlock:（商品id集合，分区中对应的用户id集合，打分集合）</code>， 如：</p>
+<p><code>([v1, v2, v1, v2, v2], [ui1, ui1, ui2, ui2, ui3], [r11, r12, r21, r22, r32])</code>。</p>
+<p>这种结构仍旧有压缩的空间，spark调用<code>compress</code>方法将商品id进行排序（排序有两个好处，除了压缩以外，后文构建最小二乘也会因此受益）， 并且转换为<code>（不重复的有序的商品id集合，商品位置偏移集合，分区中对应的用户id集合，打分集合）</code>的形式，以获得更优的存储效率（代码中就是将矩阵的<code>coo</code>格式转换为<code>csc</code>格式，你可以更进一步了解矩阵存储，以获得更多信息）。 以这样的格式修改：</p>
+<p><code>([v1, v2, v1, v2, v2], [ui1, ui1, ui2, ui2, ui3], [r11, r12, r21, r22, r32])</code></p>
+<p>排序后得到：</p>
+<p><code>([v1, v1 v2, v2, v2], [ui1, ui1, ui2, ui2, ui3], [r11, r12, r21, r22, r32])</code></p>
+<p>最终得到的结果是：</p>
+<p><code>([v1, v2], [0, 2, 5], [ui1, ui2, ui1, ui2, ui3], [r11, r21, r12, r22, r32])</code></p>
+<p>其中<code>[0, 2]</code>指<code>v1</code>对应的打分的位置区间是<code>[0, 2）</code>，v2对应的打分的位置区间是<code>[2, 5）</code>。</p>
+<p>我们继续看mapValues中的代码 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">.mapValues &#123; iter =&gt;</div><div class="line">  val builder =</div><div class="line">    new UncompressedInBlockBuilder[ID](new LocalIndexEncoder(dstPart.numPartitions))</div><div class="line">  iter.foreach &#123; case (dstBlockId, srcIds, dstLocalIndices, ratings) =&gt;</div><div class="line">    builder.add(dstBlockId, srcIds, dstLocalIndices, ratings)</div><div class="line">  &#125;</div><div class="line">  builder.build().compress()</div><div class="line">&#125;.setName(prefix + &quot;InBlocks&quot;)</div><div class="line">.persist(storageLevel)</div></pre></td></tr></table></figure>
+<p>下面我们就来看下compress方法是如何创建InBlock的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">def compress(): InBlock[ID] = &#123;</div><div class="line">  val sz = length</div><div class="line">  assert(sz &gt; 0, &quot;Empty in-link block should not exist.&quot;)</div><div class="line">  // 商品id进行排序</div><div class="line">  sort()</div><div class="line">  val uniqueSrcIdsBuilder = mutable.ArrayBuilder.make[ID]</div><div class="line">  val dstCountsBuilder = mutable.ArrayBuilder.make[Int]</div><div class="line">  var preSrcId = srcIds(0)</div><div class="line">  uniqueSrcIdsBuilder += preSrcId</div><div class="line">  var curCount = 1</div><div class="line">  var i = 1</div><div class="line">  // 笔者认为这里的变量j是无用的</div><div class="line">  var j = 0</div><div class="line">  while (i &lt; sz) &#123;</div><div class="line">    val srcId = srcIds(i)</div><div class="line">    if (srcId != preSrcId) &#123;</div><div class="line">      uniqueSrcIdsBuilder += srcId</div><div class="line">      dstCountsBuilder += curCount</div><div class="line">      preSrcId = srcId</div><div class="line">      j += 1</div><div class="line">      curCount = 0</div><div class="line">    &#125;</div><div class="line">    curCount += 1</div><div class="line">    i += 1</div><div class="line">  &#125;</div><div class="line">  dstCountsBuilder += curCount</div><div class="line">  val uniqueSrcIds = uniqueSrcIdsBuilder.result()</div><div class="line">  val numUniqueSrdIds = uniqueSrcIds.length</div><div class="line">  val dstCounts = dstCountsBuilder.result()</div><div class="line">  val dstPtrs = new Array[Int](numUniqueSrdIds + 1)</div><div class="line">  var sum = 0</div><div class="line">  i = 0</div><div class="line">  while (i &lt; numUniqueSrdIds) &#123;</div><div class="line">  // 计算偏移</div><div class="line">    sum += dstCounts(i)</div><div class="line">    i += 1</div><div class="line">    dstPtrs(i) = sum</div><div class="line">  &#125;</div><div class="line">  // 返回值InBlock中包含 （不重复的有序的商品id集合，商品位置偏移集合，分区中对应的用户id集合，打分集合）</div><div class="line">  InBlock(uniqueSrcIds, dstPtrs, dstEncodedIndices, ratings)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>笔者认为上述的变量j是无用的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var j = 0</div></pre></td></tr></table></figure>
+<p>该问题已经提交到Spark Github 并merged：<a href="https://github.com/apache/spark/commit/cca8680047bb2ec312ffc296a561abd5cbc8323c" target="_blank" rel="external">https://github.com/apache/spark/commit/cca8680047bb2ec312ffc296a561abd5cbc8323c</a></p>
+<h4 id="5-2-5-2-OutBlock"><a href="#5-2-5-2-OutBlock" class="headerlink" title="5.2.5.2 OutBlock"></a>5.2.5.2 OutBlock</h4><p>下面以求用户的<code>OutBlock</code>为例子，则<code>src</code>将代表用户，<code>dst</code>代表着商品。看下<code>makeBlocks</code>方法中的<code>OutBlock</code>部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">// 这里的inBlocks的格式为</div><div class="line">// （用户分区id，（不重复的有序的用户id集合，用户位置偏移集合，分区中对应的商品id集合，打分集合））</div><div class="line">    val outBlocks = inBlocks.mapValues &#123; case InBlock(srcIds, dstPtrs, dstEncodedIndices, _) =&gt;</div><div class="line">      val encoder = new LocalIndexEncoder(dstPart.numPartitions)</div><div class="line">      // activeIds是一个二维数组</div><div class="line">      // 第一维是 商品的分区id</div><div class="line">      // 第二位是 不重复的有序的用户id集合的位置的集合</div><div class="line">      val activeIds = Array.fill(dstPart.numPartitions)(mutable.ArrayBuilder.make[Int])</div><div class="line">      var i = 0</div><div class="line">      // 用来记录 该用户的id是否已经加入activeIds了各个第一维度（商品的分区）中 </div><div class="line">      val seen = new Array[Boolean](dstPart.numPartitions)</div><div class="line">      // 遍历不重复的有序的用户id集合</div><div class="line">      while (i &lt; srcIds.length) &#123;</div><div class="line">      // 遍历用户id为i的用户所对应的所有商品id</div><div class="line">        var j = dstPtrs(i)</div><div class="line">        // 置全为否</div><div class="line">        ju.Arrays.fill(seen, false)</div><div class="line">        while (j &lt; dstPtrs(i + 1)) &#123;</div><div class="line">        // 根据商品id得到商品分区id</div><div class="line">          val dstBlockId = encoder.blockId(dstEncodedIndices(j))</div><div class="line">          if (!seen(dstBlockId)) &#123;</div><div class="line">          // 该不重复的有序的用户id集合的位置 加入activeIds对应的商品分区下</div><div class="line">            activeIds(dstBlockId) += i</div><div class="line">            seen(dstBlockId) = true</div><div class="line">          &#125;</div><div class="line">          j += 1</div><div class="line">        &#125;</div><div class="line">        i += 1</div><div class="line">      &#125;</div><div class="line">      activeIds.map &#123; x =&gt;</div><div class="line">        x.result()</div><div class="line">      &#125;</div><div class="line">    &#125;.setName(prefix + &quot;OutBlocks&quot;)</div><div class="line">      .persist(storageLevel)</div></pre></td></tr></table></figure>
+<h3 id="5-2-6-利用inblock和outblock信息构建最小二乘"><a href="#5-2-6-利用inblock和outblock信息构建最小二乘" class="headerlink" title="5.2.6 利用inblock和outblock信息构建最小二乘"></a>5.2.6 利用inblock和outblock信息构建最小二乘</h3><p>交换最小二乘算法是分别固定用户特征矩阵和商品特征矩阵来交替计算下一次迭代的商品特征矩阵和用户特征矩阵</p>
+<p>初始化后的userFactors的格式是<code>（用户分区id，用户特征矩阵factors）</code>，其中factors是一个二维数组，第一维的长度是用户数，第二维的长度是rank数。初始化的值是异或随机数的F范式。itemFactors的初始化与此类似。</p>
+<p>通过用户的<code>OutBlock</code>把用户信息发给商品分区，然后结合商品的<code>InBlock</code>信息构建最小二乘问题，我们就可以借此解得商品的极小解。反之，通过商品<code>OutBlock</code>把商品信息发送给用户分区，然后结合用户的<code>InBlock</code>信息构建最小二乘问题，我们就可以解得用户解：</p>
+<p><code>ALS.train</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line">  val seedGen = new XORShiftRandom(seed)</div><div class="line">  var userFactors = initialize(userInBlocks, rank, seedGen.nextLong())</div><div class="line">  var itemFactors = initialize(itemInBlocks, rank, seedGen.nextLong())</div><div class="line">  var previousCheckpointFile: Option[String] = None</div><div class="line">  val shouldCheckpoint: Int =&gt; Boolean = (iter) =&gt;</div><div class="line">    sc.checkpointDir.isDefined &amp;&amp; checkpointInterval != -1 &amp;&amp; (iter % checkpointInterval == 0)</div><div class="line">  val deletePreviousCheckpointFile: () =&gt; Unit = () =&gt;</div><div class="line">    previousCheckpointFile.foreach &#123; file =&gt;</div><div class="line">      try &#123;</div><div class="line">        val checkpointFile = new Path(file)</div><div class="line">        checkpointFile.getFileSystem(sc.hadoopConfiguration).delete(checkpointFile, true)</div><div class="line">      &#125; catch &#123;</div><div class="line">        case e: IOException =&gt;</div><div class="line">          logWarning(s&quot;Cannot delete checkpoint file $file:&quot;, e)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // 隐式偏好</div><div class="line">  if (implicitPrefs) &#123;</div><div class="line">    for (iter &lt;- 1 to maxIter) &#123;</div><div class="line">      userFactors.setName(s&quot;userFactors-$iter&quot;).persist(intermediateRDDStorageLevel)</div><div class="line">      val previousItemFactors = itemFactors</div><div class="line">      itemFactors = computeFactors(userFactors, userOutBlocks, itemInBlocks, rank, regParam,</div><div class="line">        userLocalIndexEncoder, implicitPrefs, alpha, solver)</div><div class="line">      previousItemFactors.unpersist()</div><div class="line">      itemFactors.setName(s&quot;itemFactors-$iter&quot;).persist(intermediateRDDStorageLevel)</div><div class="line">      val deps = itemFactors.dependencies</div><div class="line">      if (shouldCheckpoint(iter)) &#123;</div><div class="line">        itemFactors.checkpoint() </div><div class="line">      &#125;</div><div class="line">      val previousUserFactors = userFactors</div><div class="line">      userFactors = computeFactors(itemFactors, itemOutBlocks, userInBlocks, rank, regParam,</div><div class="line">        itemLocalIndexEncoder, implicitPrefs, alpha, solver)</div><div class="line">      if (shouldCheckpoint(iter)) &#123;</div><div class="line">        ALS.cleanShuffleDependencies(sc, deps)</div><div class="line">        deletePreviousCheckpointFile()</div><div class="line">        previousCheckpointFile = itemFactors.getCheckpointFile</div><div class="line">      &#125;</div><div class="line">      previousUserFactors.unpersist()</div><div class="line">    &#125;</div><div class="line">    // 显示偏好</div><div class="line">  &#125; else &#123;</div><div class="line">    for (iter &lt;- 0 until maxIter) &#123;</div><div class="line">      itemFactors = computeFactors(userFactors, userOutBlocks, itemInBlocks, rank, regParam,</div><div class="line">        userLocalIndexEncoder, solver = solver)</div><div class="line">      if (shouldCheckpoint(iter)) &#123;</div><div class="line">        val deps = itemFactors.dependencies</div><div class="line">        itemFactors.checkpoint()</div><div class="line">        itemFactors.count() </div><div class="line">        ALS.cleanShuffleDependencies(sc, deps)</div><div class="line">        deletePreviousCheckpointFile()</div><div class="line">        previousCheckpointFile = itemFactors.getCheckpointFile</div><div class="line">      &#125;</div><div class="line">      userFactors = computeFactors(itemFactors, itemOutBlocks, userInBlocks, rank, regParam,</div><div class="line">        itemLocalIndexEncoder, solver = solver)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  // 生成用户特征矩阵</div><div class="line">  val userIdAndFactors = userInBlocks</div><div class="line">    .mapValues(_.srcIds)</div><div class="line">    .join(userFactors)</div><div class="line">    .mapPartitions(&#123; items =&gt;</div><div class="line">      items.flatMap &#123; case (_, (ids, factors)) =&gt;</div><div class="line">        ids.view.zip(factors)</div><div class="line">      &#125;</div><div class="line">    &#125;, preservesPartitioning = true)</div><div class="line">    .setName(&quot;userFactors&quot;)</div><div class="line">    .persist(finalRDDStorageLevel)</div><div class="line">    // 生成商品特征矩阵</div><div class="line">  val itemIdAndFactors = itemInBlocks</div><div class="line">    .mapValues(_.srcIds)</div><div class="line">    .join(itemFactors)</div><div class="line">    .mapPartitions(&#123; items =&gt;</div><div class="line">      items.flatMap &#123; case (_, (ids, factors)) =&gt;</div><div class="line">        ids.view.zip(factors)</div><div class="line">      &#125;</div><div class="line">    &#125;, preservesPartitioning = true)</div><div class="line">    .setName(&quot;itemFactors&quot;)</div><div class="line">    .persist(finalRDDStorageLevel)</div><div class="line">  if (finalRDDStorageLevel != StorageLevel.NONE) &#123;</div><div class="line">    userIdAndFactors.count()</div><div class="line">    itemFactors.unpersist()</div><div class="line">    itemIdAndFactors.count()</div><div class="line">    userInBlocks.unpersist()</div><div class="line">    userOutBlocks.unpersist()</div><div class="line">    itemInBlocks.unpersist()</div><div class="line">    itemOutBlocks.unpersist()</div><div class="line">    blockRatings.unpersist()</div><div class="line">  &#125;</div><div class="line">  (userIdAndFactors, itemIdAndFactors)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-2-6-1-computeFactors"><a href="#5-2-6-1-computeFactors" class="headerlink" title="5.2.6.1 computeFactors"></a>5.2.6.1 computeFactors</h4><p>我们可以看到，构建最小二乘的方法是在<code>computeFactors</code>方法中实现的。我们以<strong><em>商品<code>inblock</code></em></strong>信息结合<strong><em>用户<code>outblock</code></em></strong>信息构建最小二乘为例来说明这个过程:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">private def computeFactors[ID](</div><div class="line">    srcFactorBlocks: RDD[(Int, FactorBlock)],</div><div class="line">    srcOutBlocks: RDD[(Int, OutBlock)],</div><div class="line">    dstInBlocks: RDD[(Int, InBlock[ID])],</div><div class="line">    rank: Int,</div><div class="line">    regParam: Double,</div><div class="line">    srcEncoder: LocalIndexEncoder,</div><div class="line">    implicitPrefs: Boolean = false,</div><div class="line">    alpha: Double = 1.0,</div><div class="line">    solver: LeastSquaresNESolver): RDD[(Int, FactorBlock)] = &#123;</div><div class="line">  val numSrcBlocks = srcFactorBlocks.partitions.length</div><div class="line">  // 若隐式偏好 </div><div class="line">  // 则计算 YtY</div><div class="line">  val YtY = if (implicitPrefs) Some(computeYtY(srcFactorBlocks, rank)) else None</div><div class="line">  val srcOut =</div><div class="line">  // 用用户outblock与userFactor进行join操作 </div><div class="line">  srcOutBlocks.join(srcFactorBlocks).flatMap &#123;</div><div class="line">    case (srcBlockId, (srcOutBlock, srcFactors)) =&gt;</div><div class="line">      srcOutBlock.view.zipWithIndex.map &#123; case (activeIndices, dstBlockId) =&gt;</div><div class="line">      // 每一个商品分区包含一组所需的用户分区及其对应的用户factor信息</div><div class="line">      // 格式即（商品分区id集合，（用户分区id集合，用户分区对应的factor集合））</div><div class="line">        (dstBlockId, (srcBlockId, activeIndices.map(idx =&gt; srcFactors(idx))))</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 以商品分区id为key进行分组</div><div class="line">  val merged = srcOut.groupByKey(new ALSPartitioner(dstInBlocks.partitions.length))</div><div class="line">  // 用商品inblock信息与merged进行join操作</div><div class="line">  dstInBlocks.join(merged).mapValues &#123;</div><div class="line">  ......</div></pre></td></tr></table></figure>
+<p>我们知道求解商品值时，我们需要通过<strong><em>所有和商品关联的用户向量信息</em></strong>来构建最小二乘问题。这里有两个选择，第一是扫一遍InBlock信息，同时对所有的产品构建对应的最小二乘问题； 第二是对于每一个产品，扫描InBlock信息，构建并求解其对应的最小二乘问题。第一种方式复杂度较高，spark选取第二种方法求解最小二乘问题，同时也做了一些优化。 做优化的原因是二种方法针对每个商品，都会扫描一遍InBlock信息，这会浪费较多时间，为此，将InBlock按照商品id进行排序，我们通过一次扫描就可以创建所有的最小二乘问题并求解。 我们来继续看代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">// 遍历各个商品分区</div><div class="line">// 数据格式为 （（该商品分区的不重复的有序的商品id集合，该商品分区的商品位置偏移集合，该商品分区中对应的用户id集合，打分集合），（用户分区id集合-&gt;用户分区对应的factor集合））</div><div class="line">      case (InBlock(dstIds, srcPtrs, srcEncodedIndices, ratings), srcFactors) =&gt;</div><div class="line">      // 从 srcFactors: Iterable[(Int,Array[Array[Float]])] 中取出值到数组sortedSrcFactors</div><div class="line">      // 即得得到用户特征数组</div><div class="line">        val sortedSrcFactors = new Array[FactorBlock](numSrcBlocks)</div><div class="line">        srcFactors.foreach &#123; case (srcBlockId, factors) =&gt;</div><div class="line">          sortedSrcFactors(srcBlockId) = factors</div><div class="line">        &#125;</div><div class="line">        // 保存要求解的商品特征</div><div class="line">        val dstFactors = new Array[Array[Float]](dstIds.length)</div><div class="line">        var j = 0</div><div class="line">        // 保存rank维度的正规方程组</div><div class="line">        val ls = new NormalEquation(rank)</div><div class="line">        // 遍历商品</div><div class="line">        while (j &lt; dstIds.length) &#123;</div><div class="line">          ls.reset()</div><div class="line">          if (implicitPrefs) &#123;</div><div class="line">            ls.merge(YtY.get)</div><div class="line">          &#125;</div><div class="line">          var i = srcPtrs(j)</div><div class="line">          var numExplicits = 0</div><div class="line">          // 商品dstIds(j)对应的遍历用户</div><div class="line">          while (i &lt; srcPtrs(j + 1)) &#123;</div><div class="line">          // 解码得到用户分区号 和 该分区内的地址</div><div class="line">            val encoded = srcEncodedIndices(i)</div><div class="line">            val blockId = srcEncoder.blockId(encoded)</div><div class="line">            val localIndex = srcEncoder.localIndex(encoded)</div><div class="line">            // 得到 该用户特征向量</div><div class="line">            val srcFactor = sortedSrcFactors(blockId)(localIndex)</div><div class="line">            val rating = ratings(i)</div><div class="line">            if (implicitPrefs) &#123;</div><div class="line">              val c1 = alpha * math.abs(rating)</div><div class="line">              if (rating &gt; 0) &#123;</div><div class="line">                numExplicits += 1</div><div class="line">                ls.add(srcFactor, (c1 + 1.0) / c1, c1)</div><div class="line">              &#125;</div><div class="line">            &#125; else &#123;</div><div class="line">              ls.add(srcFactor, rating)</div><div class="line">              numExplicits += 1</div><div class="line">            &#125;</div><div class="line">            i += 1</div><div class="line">          &#125;</div><div class="line">          // 优化商品dstIds(j)对应的特征向量</div><div class="line">          dstFactors(j) = solver.solve(ls, numExplicits * regParam)</div><div class="line">          j += 1</div><div class="line">        &#125;</div><div class="line">        dstFactors</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h3 id="5-2-7-优化器"><a href="#5-2-7-优化器" class="headerlink" title="5.2.7 优化器"></a>5.2.7 优化器</h3><p>接下来我们讲讲上一节中对特征向量进行优化的优化器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">private[recommendation] trait LeastSquaresNESolver extends Serializable &#123;</div><div class="line">  def solve(ne: NormalEquation, lambda: Double): Array[Float]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>CholeskySolver和NNLSSolver实现了LeastSquaresNESolver。</p>
+<h4 id="5-2-7-1-CholeskySolver"><a href="#5-2-7-1-CholeskySolver" class="headerlink" title="5.2.7.1 CholeskySolver"></a>5.2.7.1 CholeskySolver</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">private[recommendation] class CholeskySolver extends LeastSquaresNESolver &#123;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * 这里所使用的代价函数为：</div><div class="line">   *   $min norm(A x - b)^2^ + lambda * norm(x)^2^$</div><div class="line">   */</div><div class="line">  override def solve(ne: NormalEquation, lambda: Double): Array[Float] = &#123;</div><div class="line">    val k = ne.k</div><div class="line">    // 在上正定矩阵A的对角线上加上lambda</div><div class="line">    var i = 0</div><div class="line">    var j = 2</div><div class="line">    while (i &lt; ne.triK) &#123;</div><div class="line">      ne.ata(i) += lambda</div><div class="line">      i += j</div><div class="line">      j += 1</div><div class="line">    &#125;</div><div class="line">    //直接调用netlib-java封装的方法实现</div><div class="line">    CholeskyDecomposition.solve(ne.ata, ne.atb)</div><div class="line">    val x = new Array[Float](k)</div><div class="line">    i = 0</div><div class="line">    while (i &lt; k) &#123;</div><div class="line">      x(i) = ne.atb(i).toFloat</div><div class="line">      i += 1</div><div class="line">    &#125;</div><div class="line">    ne.reset()</div><div class="line">    x</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-2-7-2-NNLSSolver"><a href="#5-2-7-2-NNLSSolver" class="headerlink" title="5.2.7.2 NNLSSolver"></a>5.2.7.2 NNLSSolver</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">private[recommendation] class NNLSSolver extends LeastSquaresNESolver &#123;</div><div class="line">  private var rank: Int = -1</div><div class="line">  private var workspace: NNLS.Workspace = _</div><div class="line">  private var ata: Array[Double] = _</div><div class="line">  private var initialized: Boolean = false</div><div class="line"></div><div class="line">  private def initialize(rank: Int): Unit = &#123;</div><div class="line">    if (!initialized) &#123;</div><div class="line">      this.rank = rank</div><div class="line">      workspace = NNLS.createWorkspace(rank)</div><div class="line">      ata = new Array[Double](rank * rank)</div><div class="line">      initialized = true</div><div class="line">    &#125; else &#123;</div><div class="line">      require(this.rank == rank)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Solves a nonnegative least squares problem with L2 regularization:</div><div class="line">   *</div><div class="line">   *   min_x_  norm(A x - b)^2^ + lambda * n * norm(x)^2^</div><div class="line">   *   subject to x &gt;= 0</div><div class="line">   */</div><div class="line">  override def solve(ne: NormalEquation, lambda: Double): Array[Float] = &#123;</div><div class="line">    val rank = ne.k</div><div class="line">    initialize(rank)</div><div class="line">    fillAtA(ne.ata, lambda)</div><div class="line">    val x = NNLS.solve(ata, ne.atb, workspace)</div><div class="line">    ne.reset()</div><div class="line">    x.map(x =&gt; x.toFloat)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Given a triangular matrix in the order of fillXtX above, compute the full symmetric square</div><div class="line">   * matrix that it represents, storing it into destMatrix.</div><div class="line">   */</div><div class="line">  private def fillAtA(triAtA: Array[Double], lambda: Double) &#123;</div><div class="line">    var i = 0</div><div class="line">    var pos = 0</div><div class="line">    var a = 0.0</div><div class="line">    while (i &lt; rank) &#123;</div><div class="line">      var j = 0</div><div class="line">      while (j &lt;= i) &#123;</div><div class="line">        a = triAtA(pos)</div><div class="line">        ata(i * rank + j) = a</div><div class="line">        ata(j * rank + i) = a</div><div class="line">        pos += 1</div><div class="line">        j += 1</div><div class="line">      &#125;</div><div class="line">      ata(i * rank + i) += lambda</div><div class="line">      i += 1</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="6-参考文献"><a href="#6-参考文献" class="headerlink" title="6. 参考文献"></a>6. 参考文献</h1><p>【1】Y Koren, R Bell, C Volinsky. Matrix factorization techniques for recommender systems. IEEE, Computer Journal,2009: 42(8), 30-37<br>【2】ZHENG F. Matrix factorization recommendation algorithm based on Spark [D]. Chengdu: School of Information Science and Technology, Southwest Jiaotong University, 2015.<br>【3】Yang Z.The Research of Recommendation System Based on Spark Platform [D].Anhui:University of Science and Technology of China,2015.<br>【4】M Zaharia，M Chowdhury，T Das，A Dave，J Ma . Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing. Usenix Conference on Networked Systems Design, 2012, 70(2):141-146<br>【5】<a href="https://github.com/endymecy/spark-ml-source-analysis/blob/master/%E6%8E%A8%E8%8D%90/ALS.md" target="_blank" rel="external">《交换最小二乘》</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢大佬的支持<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -520,73 +501,98 @@ var _hmt = _hmt || [];
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://z306223558.github.io/2017/07/04/理解Spark ML:基于ALS矩阵分解的协同过滤推荐算法模型/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/04/数据处理流程/" class="archive-article-date">
-  	<time datetime="2017-07-04T03:29:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/04/数据处理流程/">数据获取和产生机制</a>
-    </h1>
+    <a href="/2017/07/04/Hadoop基础学习六/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Hadoop基础学习六
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/04/数据处理流程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据获取和产生机制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Hue</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">spark</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LDA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">scrapy</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -609,8 +615,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
